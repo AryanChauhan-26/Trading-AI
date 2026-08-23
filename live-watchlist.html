@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Shares | Quantum Trading AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="live-watchlist-page">
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+
+    <div class="app-container">
+        <header class="app-header live-watchlist-header">
+            <a class="header-logo live-watchlist-brand" href="index.html" aria-label="Back to Quantum Trading AI home">
+                <div class="logo-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="url(#logoGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs><linearGradient id="logoGrad" x1="3" y1="2" x2="21" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#10B981"/><stop offset="0.5" stop-color="#6366F1"/><stop offset="1" stop-color="#06B6D4"/></linearGradient></defs>
+                    </svg>
+                </div>
+                <h1>Quantum Trading <span class="accent-text">AI</span></h1>
+            </a>
+            <div class="live-watchlist-header-actions">
+                <span class="header-chip">All live markets</span>
+                <a class="btn-secondary live-back-link" href="index.html">Back to desk</a>
+            </div>
+        </header>
+
+        <main class="live-watchlist-main">
+            <section class="live-watchlist-intro">
+                <div>
+                    <p class="hero-eyebrow">Market watch / live assets</p>
+                    <h2>Only live markets, at a glance.</h2>
+                    <p class="live-watchlist-description">Track active stocks, crypto, forex, and commodities. Closed exchanges are automatically hidden until their next trading session.</p>
+                </div>
+                <div class="live-market-status">
+                    <span class="pulse-dot"></span>
+                    <div><strong>Live feed</strong><span id="last-updated">Updating now</span></div>
+                </div>
+            </section>
+
+            <section class="live-watchlist-summary" aria-label="Market summary">
+                <div class="live-summary-item"><span>Live assets</span><strong id="tracked-count">0</strong></div>
+                <div class="live-summary-item"><span>Advancing</span><strong class="text-buy" id="advancing-count">0</strong></div>
+                <div class="live-summary-item"><span>Declining</span><strong class="text-sell" id="declining-count">0</strong></div>
+                <div class="live-summary-item"><span>Last refresh</span><strong class="font-mono" id="refresh-time">--:--:--</strong></div>
+            </section>
+
+            <section class="live-watchlist-panel card">
+                <div class="live-watchlist-toolbar">
+                    <div class="card-header live-watchlist-title">
+                        <div><h2>Live market feed</h2><p>Prices refresh every second</p></div>
+                        <div class="live-indicator"><span class="pulse-dot"></span> Streaming</div>
+                    </div>
+                    <label class="search-box live-search-box">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        <input id="live-share-search" type="search" placeholder="Search symbol, company, or market" autocomplete="off">
+                    </label>
+                </div>
+                <div class="live-share-table-wrap">
+                    <table class="live-share-table">
+                        <thead><tr><th>Share</th><th>Exchange</th><th>Signal</th><th class="numeric-column">Live price</th><th class="numeric-column">Change</th><th class="numeric-column">Session</th></tr></thead>
+                        <tbody id="live-share-list"></tbody>
+                    </table>
+                    <div class="live-empty-state" id="live-empty-state" hidden>No markets are live or no assets match your search.</div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="app-footer">
+        <a href="index.html">Trading App</a>
+        <a href="ai-signals.html">AI Signals</a>
+        <a href="about.html">About</a>
+        <a href="disclaimer.html">Disclaimer</a>
+        <span>Quantum Trading AI is a simulated platform for educational purposes.</span>
+    </footer>
+
+    <script src="live-watchlist.js"></script>
+</body>
+</html>
