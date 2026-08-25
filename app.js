@@ -902,6 +902,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let mainChartWidget = null;
     function loadMainChart(symbol, interval) {
         const chartContainer = document.getElementById("chart-container");
+        if (!chartContainer) return;
         chartContainer.innerHTML = "";
 
         const placeholder = document.createElement("div");
@@ -1100,15 +1101,19 @@ document.addEventListener("DOMContentLoaded", () => {
         if (isOpen) {
             elMarketStatusBadge.textContent = "Market Open";
             elMarketStatusBadge.className = "market-status-badge open";
-            btnExecuteTrade.disabled = false;
-            btnExecuteTrade.style.opacity = "1";
-            btnExecuteTrade.style.cursor = "pointer";
+            if (btnExecuteTrade) {
+                btnExecuteTrade.disabled = false;
+                btnExecuteTrade.style.opacity = "1";
+                btnExecuteTrade.style.cursor = "pointer";
+            }
         } else {
             elMarketStatusBadge.textContent = "Market Closed";
             elMarketStatusBadge.className = "market-status-badge closed";
-            btnExecuteTrade.disabled = true;
-            btnExecuteTrade.style.opacity = "0.5";
-            btnExecuteTrade.style.cursor = "not-allowed";
+            if (btnExecuteTrade) {
+                btnExecuteTrade.disabled = true;
+                btnExecuteTrade.style.opacity = "0.5";
+                btnExecuteTrade.style.cursor = "not-allowed";
+            }
         }
     }
 
@@ -1171,6 +1176,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Updates price displays in active header banner and calculator
     function updateActivePriceUI() {
+        if (!activeAsset || !elActiveLivePrice) return;
+
         const currentPriceUSD = livePrices[activeAsset.id]; // Get price in USD
         const decimals = activeAsset.priceDecimals;
         
@@ -1185,19 +1192,22 @@ document.addEventListener("DOMContentLoaded", () => {
             elActiveLivePrice.classList.add("text-sell");
         }
 
-        // Calculate and format daily simulated change (+3.42 (+1.32%))
-        const rawDiffUSD = currentPriceUSD - activeAsset.basePriceUSD; // Calculate diff in USD
-        const pctDiff = (rawDiffUSD / activeAsset.basePriceUSD) * 100;
-        
-        const sign = rawDiffUSD >= 0 ? "+" : "";
-        const formattedDiff = formatCurrency(rawDiffUSD, decimals);
-        const formattedPct = pctDiff.toFixed(2);
-        
-        elActivePriceChange.textContent = `${sign}${formattedDiff} (${sign}${formattedPct}%)`;
-        elActivePriceChange.className = "ticker-change " + (rawDiffUSD >= 0 ? "text-buy" : "text-sell");
+        if (elActivePriceChange) {
+            const rawDiffUSD = currentPriceUSD - activeAsset.basePriceUSD; // Calculate diff in USD
+            const pctDiff = (rawDiffUSD / activeAsset.basePriceUSD) * 100;
+            
+            const sign = rawDiffUSD >= 0 ? "+" : "";
+            const formattedDiff = formatCurrency(rawDiffUSD, decimals);
+            const formattedPct = pctDiff.toFixed(2);
+            
+            elActivePriceChange.textContent = `${sign}${formattedDiff} (${sign}${formattedPct}%)`;
+            elActivePriceChange.className = "ticker-change " + (rawDiffUSD >= 0 ? "text-buy" : "text-sell");
+        }
 
         // Update Calculator/Simulator entry display logic
-        updateCalculatorOutput();
+        if (inputMargin && inputLeverage && elPositionValueDisplay && elEstimateQty && elEstimateProfit && elEstimateLoss) {
+            updateCalculatorOutput();
+        }
     }
 
 
@@ -1205,6 +1215,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Renders the watchlist based on category & country filters & search term
     function renderWatchlist() {
+        if (!watchlistContainer || !searchInput) return;
+
         const activeCatTab = document.querySelector(".watchlist-filter:not(.secondary-filter) .filter-tab.active");
         const category = activeCatTab ? activeCatTab.getAttribute("data-category") : "all";
         
@@ -1332,44 +1344,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Central function to load all data for a given asset
     function loadAssetData(asset) {
-        // Update active banner tags
-        elActiveCategory.textContent = asset.category.toUpperCase(); // No change
-        elActiveExchange.textContent = asset.exchange;
-        elActiveFullName.textContent = asset.name;
-        elActiveSymbol.textContent = asset.id;
+        if (elActiveCategory) elActiveCategory.textContent = asset.category.toUpperCase();
+        if (elActiveExchange) elActiveExchange.textContent = asset.exchange;
+        if (elActiveFullName) elActiveFullName.textContent = asset.name;
+        if (elActiveSymbol) elActiveSymbol.textContent = asset.id;
 
-        // Highlight in watchlist (no change)
         document.querySelectorAll(".watchlist-item").forEach(item => {
             item.classList.toggle("active", item.getAttribute("data-id") === asset.id);
         });
 
-        // Force immediate price display updates
         updateActivePriceUI();
-        
-        // Update the market clock & status badge immediately for the new asset
         updateMarketClock();
 
-        // Initialize livePrices for the active asset with its USD base price
         livePrices[asset.id] = asset.basePriceUSD;
 
-        // Reload TradingView Advanced Chart
-        loadMainChart(asset.tvSymbol, activeTimeframe); // Chart can load immediately
+        if (document.getElementById("chart-container")) {
+            loadMainChart(asset.tvSymbol, activeTimeframe);
+        }
 
-        // --- Simulate AI Analysis Delay ---
-        aiCardContent.classList.add("analyzing");
+        if (aiCardContent) {
+            aiCardContent.classList.add("analyzing");
+        }
 
-        // Show toast immediately for responsiveness
         showToast(`AI analyzing market data for ${asset.id}...`, 'info');
 
-        // Simulate a 1.5 second "thinking" period for the AI
         setTimeout(() => {
-            // Update all AI-related UI elements after the delay
             loadAllGauges();
-            updateAdviceConsole();
-            fillAdvisorySetup();
+            if (elSignalIndicator && elSignalText && elSignalStrength && elTargetEntry && elTargetTP1 && elTargetTP2 && elTargetSL && elRationaleText && elBestLapValue) {
+                updateAdviceConsole();
+                fillAdvisorySetup();
+            }
 
-            // Remove the loading state
-            aiCardContent.classList.remove("analyzing");
+            if (aiCardContent) {
+                aiCardContent.classList.remove("analyzing");
+            }
 
             showToast(`AI analysis for ${asset.id} complete.`, 'success', 2000);
         }, 1500);
@@ -1382,6 +1390,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Dynamically updates written recommendations and buy/sell levels relative to current prices
     function updateAdviceConsole() {
+        if (!elSignalIndicator || !elSignalText || !elSignalStrength || !elTargetEntry || !elTargetTP1 || !elTargetTP2 || !elTargetSL || !elRationaleText || !elBestLapValue) {
+            return;
+        }
+
         const curPriceUSD = livePrices[activeAsset.id]; // Always work with USD internally
         const decimals = activeAsset.priceDecimals;
         
@@ -1435,6 +1447,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Auto-populates TP/SL simulator fields with AI Advisor targets
     function fillAdvisorySetup() {
+        if (!inputTP || !inputSL) return;
+
         const curPriceUSD = livePrices[activeAsset.id]; // Always work with USD internally
         const decimals = activeAsset.priceDecimals;
         const signal = activeAsset.signal;
@@ -1460,6 +1474,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- SIMULATOR & CALCULATOR ENGINE ---
 
     function setOrderMode(mode) {
+        if (!btnOrderTabBuy || !btnOrderTabSell || !btnExecuteTrade || !inputTP || !inputSL) return;
+
         simOrderType = mode;
         const isBuy = mode === "BUY";
 
@@ -1479,22 +1495,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Handles toggle tabs (BUY vs SELL)
-    btnOrderTabBuy.addEventListener("click", () => setOrderMode("BUY"));
-    btnOrderTabSell.addEventListener("click", () => setOrderMode("SELL"));
+    if (btnOrderTabBuy) btnOrderTabBuy.addEventListener("click", () => setOrderMode("BUY"));
+    if (btnOrderTabSell) btnOrderTabSell.addEventListener("click", () => setOrderMode("SELL"));
 
     // Leverage range input update
-    inputLeverage.addEventListener("input", (e) => {
-        elLeverageDisplay.textContent = `${e.target.value}x`;
-        updateCalculatorOutput();
-    });
+    if (inputLeverage) {
+        inputLeverage.addEventListener("input", (e) => {
+            if (elLeverageDisplay) elLeverageDisplay.textContent = `${e.target.value}x`;
+            updateCalculatorOutput();
+        });
+    }
 
     // Margin amount text input update
-    inputMargin.addEventListener("input", () => {
-        updateCalculatorOutput();
-    });
+    if (inputMargin) {
+        inputMargin.addEventListener("input", () => {
+            updateCalculatorOutput();
+        });
+    }
 
     // Computes active trade sizes and potential P&L calculations
     function updateCalculatorOutput() {
+        if (!inputMargin || !inputLeverage || !elPositionValueDisplay || !elEstimateQty || !elEstimateProfit || !elEstimateLoss) return;
+
         const marginInput = parseFloat(inputMargin.value) || 0;
         const marginUSD = (activeCurrency === "INR") ? marginInput / exchangeRateUSD_INR : marginInput;
         const leverage = parseInt(inputLeverage.value) || 1;
@@ -1559,7 +1581,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- SIMULATED ORDER EXECUTION ---
 
-    btnExecuteTrade.addEventListener("click", () => {
+    if (btnExecuteTrade) {
+        btnExecuteTrade.addEventListener("click", () => {
         const marginInput = parseFloat(inputMargin.value);
         const marginUSD = (activeCurrency === "INR") ? marginInput / exchangeRateUSD_INR : marginInput;
         const leverage = parseInt(inputLeverage.value);
@@ -1644,9 +1667,12 @@ document.addEventListener("DOMContentLoaded", () => {
         // Show success notification toast
         showToast(`${simOrderType === "BUY" ? "Long" : "Short"} position opened for ${activeAsset.id}!`, 'success');
     });
+    }
 
     // Renders active trades list in the journal table
     function renderActivePositions() {
+        if (!bodyActivePositions) return;
+
         bodyActivePositions.innerHTML = "";
 
         if (activePositions.length === 0) {
@@ -1655,11 +1681,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     <td colspan="11" class="empty-journal-message">No active positions. Open a simulated trade above to begin trading.</td>
                 </tr>
             `;
-            activePositionsCountTab.textContent = "0";
+            if (activePositionsCountTab) activePositionsCountTab.textContent = "0";
             return;
         }
 
-        activePositionsCountTab.textContent = activePositions.length; // No change
+        if (activePositionsCountTab) activePositionsCountTab.textContent = activePositions.length; // No change
 
         activePositions.forEach(pos => {
             const tr = document.createElement("tr");
@@ -1841,6 +1867,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Renders completed/closed trades list
     function renderTradeHistory() {
+        if (!bodyTradeHistory) return;
+
         bodyTradeHistory.innerHTML = "";
 
         if (tradeHistory.length === 0) {
@@ -1973,17 +2001,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     function setJournalView(view) {
         currentJournalView = view;
-        journalTabs.forEach(tab => {
-            const isActive = tab.getAttribute("data-journal-view") === view;
-            tab.classList.toggle("active", isActive);
-        });
+        if (journalTabs) {
+            journalTabs.forEach(tab => {
+                const isActive = tab.getAttribute("data-journal-view") === view;
+                tab.classList.toggle("active", isActive);
+            });
+        }
 
-        if (view === "active") {
-            tableActivePositions.classList.remove("hidden");
-            tableTradeHistory.classList.add("hidden");
-        } else {
-            tableActivePositions.classList.add("hidden");
-            tableTradeHistory.classList.remove("hidden");
+        if (tableActivePositions && tableTradeHistory) {
+            if (view === "active") {
+                tableActivePositions.classList.remove("hidden");
+                tableTradeHistory.classList.add("hidden");
+            } else {
+                tableActivePositions.classList.add("hidden");
+                tableTradeHistory.classList.remove("hidden");
+            }
         }
     }
 
@@ -1996,21 +2028,25 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Clear history logs
-    btnClearHistory.addEventListener("click", () => {
-        if (confirm("Are you sure you want to clear your trade history?")) {
-            tradeHistory = [];
-            localStorage.setItem("apex_history", JSON.stringify([]));
-            renderTradeHistory();
-            updateHeaderStats();
-            showToast("Trading history cleared.", 'success');
-        }
-    });
+    if (btnClearHistory) {
+        btnClearHistory.addEventListener("click", () => {
+            if (confirm("Are you sure you want to clear your trade history?")) {
+                tradeHistory = [];
+                localStorage.setItem("apex_history", JSON.stringify([]));
+                renderTradeHistory();
+                updateHeaderStats();
+                showToast("Trading history cleared.", 'success');
+            }
+        });
+    }
 
     // Apply Advisory targets to Simulator button
-    btnApplyTargets.addEventListener("click", () => {
-        fillAdvisorySetup();
-        showToast("AI Advisory setup applied to Simulator.", 'success');
-    });
+    if (btnApplyTargets) {
+        btnApplyTargets.addEventListener("click", () => {
+            fillAdvisorySetup();
+            showToast("AI Advisory setup applied to Simulator.", 'success');
+        });
+    }
 
     // Common function to reset the demo wallet and trade history
     function resetDemoWallet() {
@@ -2027,20 +2063,23 @@ document.addEventListener("DOMContentLoaded", () => {
             renderTradeHistory();
             updateHeaderStats();
             
-            // Reset simulator inputs
-            inputMargin.value = 1000;
-            inputLeverage.value = 10;
-            inputTP.value = 0;
-            inputSL.value = 0;
-            updateCalculatorOutput();
+            if (inputMargin) inputMargin.value = 1000;
+            if (inputLeverage) inputLeverage.value = 10;
+            if (inputTP) inputTP.value = 0;
+            if (inputSL) inputSL.value = 0;
+            if (inputMargin && inputLeverage && elPositionValueDisplay && elEstimateQty && elEstimateProfit && elEstimateLoss) {
+                updateCalculatorOutput();
+            }
             
-            demoTradingGuide.classList.remove("hidden"); // Show the guide again after resetting
+            if (demoTradingGuide) demoTradingGuide.classList.remove("hidden"); // Show the guide again after resetting
             showToast("Demo wallet reset to $100,000.", 'success');
         }
     }
 
     // Event listener for the existing reset wallet button (in simulator card)
-    btnResetWallet.addEventListener("click", resetDemoWallet);
+    if (btnResetWallet) {
+        btnResetWallet.addEventListener("click", resetDemoWallet);
+    }
     
     // Event listener for the new header reset button
     if (btnResetWalletHeader) {
@@ -2048,27 +2087,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Handle manual entry of TP/SL prices in simulator
-    inputTP.addEventListener("input", () => {
+    if (inputTP) inputTP.addEventListener("input", () => {
         updateCalculatorOutput();
     });
-    inputSL.addEventListener("input", () => {
+    if (inputSL) inputSL.addEventListener("input", () => {
         updateCalculatorOutput();
     });
 
     // Clickable Time-Lap Grid Cards to automatically change chart timeframe
-    elLapItem5m.addEventListener("click", () => {
+    if (elLapItem5m) elLapItem5m.addEventListener("click", () => {
         const btn = document.querySelector('[data-tv-interval="5"]');
         if (btn) btn.click();
     });
-    elLapItem15m.addEventListener("click", () => {
+    if (elLapItem15m) elLapItem15m.addEventListener("click", () => {
         const btn = document.querySelector('[data-tv-interval="15"]');
         if (btn) btn.click();
     });
-    elLapItem1h.addEventListener("click", () => {
+    if (elLapItem1h) elLapItem1h.addEventListener("click", () => {
         const btn = document.querySelector('[data-tv-interval="60"]');
         if (btn) btn.click();
     });
-    elLapItem1d.addEventListener("click", () => {
+    if (elLapItem1d) elLapItem1d.addEventListener("click", () => {
         const btn = document.querySelector('[data-tv-interval="D"]');
         if (btn) btn.click();
     });
@@ -2140,11 +2179,17 @@ document.addEventListener("DOMContentLoaded", () => {
         updateBalanceUI(); // Updates header balance display
         updateHeaderStats(); // Updates Net Profit and Active Trade counts
         renderWatchlist(); // Re-renders watchlist with new currency prices
-        renderActivePositions(); // Re-renders active positions with new currency PnL/prices
-        renderTradeHistory(); // Re-renders trade history with new currency PnL/prices
-        updateAdviceConsole(); // Updates AI advisory targets with new currency
-        updateCalculatorOutput(); // Updates simulator output with new currency
-        fillAdvisorySetup(); // This will re-populate TP/SL inputs with converted values
+        if (typeof renderActivePositions === 'function') renderActivePositions();
+        if (typeof renderTradeHistory === 'function') renderTradeHistory();
+        if (elSignalIndicator && elSignalText && elSignalStrength && elTargetEntry && elTargetTP1 && elTargetTP2 && elTargetSL && elRationaleText && elBestLapValue) {
+            updateAdviceConsole();
+        }
+        if (inputMargin && inputLeverage && elPositionValueDisplay && elEstimateQty && elEstimateProfit && elEstimateLoss) {
+            updateCalculatorOutput();
+        }
+        if (inputTP && inputSL) {
+            fillAdvisorySetup();
+        }
     }
 
     currencySelector.value = activeCurrency; // Set initial currency selector value
@@ -2163,18 +2208,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 3. Load all data for the default asset (TSLA)
     loadAssetData(activeAsset);
-    setOrderMode("BUY");
+    if (btnOrderTabBuy && btnOrderTabSell && btnExecuteTrade && inputTP && inputSL) {
+        setOrderMode("BUY");
+    }
 
     // 4. Show a one-time welcome message for new users
     if (!localStorage.getItem("apex_visited") || (activePositions.length === 0 && tradeHistory.length === 0)) {
         setTimeout(() => {
-            showToast("Welcome! Your demo wallet starts at $100,000. Pick an asset, choose BUY or SELL, and execute a trade to learn the flow.", 'info', 6500);
+            showToast("Welcome! Your demo wallet starts at $100,000. Pick an asset to explore the market watch.", 'info', 6500);
         }, 1000);
         localStorage.setItem("apex_visited", "true");
-        demoTradingGuide.classList.remove("hidden"); // Show guide for first-time users or if no trades have been made
+        if (demoTradingGuide) demoTradingGuide.classList.remove("hidden");
     }
     // Event listener for export button
-    btnExportHistory.addEventListener("click", exportTradeHistoryToCSV);
+    if (btnExportHistory) btnExportHistory.addEventListener("click", exportTradeHistoryToCSV);
 
     // Initial update of all currency displays
     updateAllCurrencyDisplays();
