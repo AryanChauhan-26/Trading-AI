@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paper Simulator | Trading AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="simulator.css">
+</head>
+<body class="simulator-page">
+    <header class="sim-header">
+        <a class="brand" href="index.html"><span class="brand-mark">T</span><span>TRADING<span class="brand-accent">AI</span></span></a>
+        <div class="desk-status"><span class="status-dot"></span> PAPER ACCOUNT <span class="status-divider"></span> MARKETS OPEN</div>
+        <div class="sim-header-actions"><div class="account-chip"><span>Available balance</span><strong id="account-balance">$100,000.00</strong></div><button class="icon-action" id="reset-account" title="Reset paper account" aria-label="Reset paper account">↺</button><a class="back-link" href="index.html">Dashboard</a></div>
+    </header>
+
+    <main class="desk-shell">
+        <div class="desk-heading"><div><p class="eyebrow">Execution workspace / 01</p><h1>Paper trading desk</h1><p class="heading-copy">Practice the setup. Read the tape. Trade without the pressure.</p></div><div class="session-clock"><span>SESSION TIME</span><strong id="session-clock">09:41:28</strong><small>UTC +05:30</small></div></div>
+        <section class="desk-grid">
+            <aside class="quote-rail panel">
+                <div class="panel-heading"><div><span class="section-kicker">MARKET RADAR</span><h2>Watchlist</h2></div><span class="live-label"><i></i> LIVE</span></div>
+                <div class="quote-search"><span>⌕</span><input id="quote-search" type="search" placeholder="Find an instrument" aria-label="Find an instrument"></div>
+                <div class="quote-list" id="quote-list"></div>
+                <div class="rail-note"><span class="note-icon">i</span><p>Prices are simulated for practice. No real orders are placed.</p></div>
+            </aside>
+
+            <section class="chart-workspace panel">
+                <div class="workspace-top"><div><span class="section-kicker">SELECTED INSTRUMENT</span><div class="instrument-title"><strong id="selected-symbol">TSLA</strong><span id="selected-name">Tesla, Inc.</span><span class="exchange-tag">NASDAQ</span></div></div><div class="chart-actions"><button class="time-button active">15m</button><button class="time-button">1h</button><button class="time-button">1D</button><button class="chart-icon" title="Fullscreen chart" aria-label="Fullscreen chart">⤢</button></div></div>
+                <div class="price-line"><strong id="selected-price">$262.84</strong><span class="price-up" id="selected-change">+2.84%</span><span class="price-caption">SIMULATED LAST PRICE</span></div>
+                <div class="chart-stage"><div class="chart-y-axis"><span>270</span><span>265</span><span>260</span><span>255</span><span>250</span></div><svg viewBox="0 0 760 300" preserveAspectRatio="none" class="price-chart" aria-label="Simulated price chart"><defs><linearGradient id="areaFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#23d3a0" stop-opacity=".24"/><stop offset="1" stop-color="#23d3a0" stop-opacity="0"/></linearGradient></defs><path class="chart-area" d="M0 220 C45 205 55 230 88 188 S150 200 180 156 S240 172 275 125 S325 154 365 110 S420 142 455 92 S510 118 542 72 S600 100 640 54 S700 78 760 28 L760 300 L0 300 Z"/><path class="chart-grid-line" d="M0 60H760M0 120H760M0 180H760M0 240H760"/><path class="chart-path" d="M0 220 C45 205 55 230 88 188 S150 200 180 156 S240 172 275 125 S325 154 365 110 S420 142 455 92 S510 118 542 72 S600 100 640 54 S700 78 760 28"/><circle class="chart-point" cx="760" cy="28" r="5"/></svg><div class="chart-x-axis"><span>09:00</span><span>10:00</span><span>11:00</span><span>12:00</span><span>13:00</span><span>14:00</span><span>15:00</span></div></div>
+                <div class="market-reading"><div><span>AI BIAS</span><strong class="bias-buy" id="ai-bias">STRONG BUY</strong></div><div><span>SESSION HIGH</span><strong id="session-high">$268.44</strong></div><div><span>SESSION LOW</span><strong id="session-low">$251.72</strong></div><div><span>VOLUME</span><strong>38.2M</strong></div></div>
+            </section>
+
+            <aside class="order-ticket panel" id="order-ticket"><div class="ticket-heading"><div><span class="section-kicker">ORDER TICKET</span><h2>Build a position</h2></div><span class="mode-badge">SIMULATED</span></div><div class="order-tabs"><button class="order-tab active buy" id="buy-tab">BUY / LONG</button><button class="order-tab sell" id="sell-tab">SELL / SHORT</button></div><div class="ticket-price"><span id="ticket-symbol">TSLA</span><strong id="ticket-price">$262.84</strong></div><label class="ticket-label" for="leverage">Leverage <output id="leverage-value">10x</output></label><input id="leverage" type="range" min="1" max="50" value="10"><div class="range-labels"><span>1x</span><span>25x</span><span>50x</span></div><label class="ticket-label" for="margin">Margin <span>USD</span></label><div class="money-input"><span>$</span><input id="margin" type="number" min="10" step="50" value="1000"></div><div class="ticket-stats"><div><span>Position value</span><strong id="position-value">$10,000.00</strong></div><div><span>Est. quantity</span><strong id="quantity">38.0450</strong></div></div><div class="risk-inputs"><label>Take profit<input id="take-profit" type="number" placeholder="Optional"></label><label>Stop loss<input id="stop-loss" type="number" placeholder="Optional"></label></div><div class="risk-summary"><div><span>Potential profit</span><strong class="positive" id="potential-profit">+$3,500.00</strong></div><div><span>Risk at stop</span><strong class="negative" id="potential-loss">-$1,000.00</strong></div></div><button class="execute-button buy" id="execute-order">EXECUTE BUY ORDER <span>↗</span></button><p class="ticket-footnote">Orders use your virtual balance and can be closed from the positions panel.</p></aside>
+        </section>
+        <section class="positions-panel panel"><div class="positions-heading"><div><span class="section-kicker">TRADE JOURNAL</span><h2>Open positions <span id="position-count">0</span></h2></div><div class="journal-actions"><button id="clear-history">Clear history</button><button id="export-history">Export CSV</button></div></div><div class="positions-table-wrap"><table><thead><tr><th>Instrument</th><th>Side</th><th>Size</th><th>Entry</th><th>Mark price</th><th>Margin</th><th>Unrealized P&amp;L</th><th></th></tr></thead><tbody id="positions-body"><tr><td colspan="8" class="empty-state"><strong>Your next trade starts here.</strong><span>Choose an instrument and execute a paper order to populate this journal.</span></td></tr></tbody></table></div></section>
+    </main>
+    <div class="toast" id="toast" role="status"></div>
+    <script src="simulator.js"></script>
+</body>
+</html>
