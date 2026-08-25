@@ -16,10 +16,15 @@
 
     <main class="desk-shell">
         <div class="desk-heading"><div><p class="eyebrow">Execution workspace / 01</p><h1>Paper trading desk</h1><p class="heading-copy">Practice the setup. Read the tape. Trade without the pressure.</p></div><div class="session-clock"><span>SESSION TIME</span><strong id="session-clock">09:41:28</strong><small>UTC +05:30</small></div></div>
+        <div class="sim-top-toolbar">
+            <label class="sim-search-box" aria-label="Find an instrument">
+                <span>⌕</span>
+                <input id="quote-search" type="search" placeholder="Find an instrument" aria-label="Find an instrument">
+            </label>
+        </div>
         <section class="desk-grid">
             <aside class="quote-rail panel">
                 <div class="panel-heading"><div><span class="section-kicker">MARKET RADAR</span><h2>Watchlist</h2></div><span class="live-label"><i></i> LIVE</span></div>
-                <div class="quote-search"><span>⌕</span><input id="quote-search" type="search" placeholder="Find an instrument" aria-label="Find an instrument"></div>
                 <div class="quote-list" id="quote-list"></div>
                 <div class="rail-note"><span class="note-icon">i</span><p>Prices are simulated for practice. No real orders are placed.</p></div>
             </aside>
