@@ -69,6 +69,22 @@
                     <option value="USD">USD ($)</option>
                     <option value="INR">INR (₹)</option>
                 </select>
+                <a href="signin.html" class="btn-secondary btn-header-action" data-auth="login">
+                    <span class="btn-header-action__icon">→</span>
+                    <span>Login</span>
+                </a>
+                <a href="signup.html" class="btn-secondary btn-header-action" data-auth="signup">
+                    <span class="btn-header-action__icon">+</span>
+                    <span>Sign up</span>
+                </a>
+                <div class="user-badge hidden" data-auth="user">
+                    <span class="user-badge__label">User</span>
+                    <span data-auth="user-name">Guest</span>
+                </div>
+                <button type="button" class="btn-secondary btn-header-action" data-auth="logout">
+                    <span class="btn-header-action__icon">⎋</span>
+                    <span>Logout</span>
+                </button>
                 <button id="btn-reset-wallet-header" class="btn-secondary btn-header-action btn-danger">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
                     <span>Reset Wallet</span>
@@ -152,6 +168,7 @@
     </div>
 
     <!-- Load main script -->
+    <script src="auth.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
