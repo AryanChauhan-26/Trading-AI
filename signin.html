@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Quantum Trading AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+
+    <main class="auth-shell">
+        <section class="auth-card">
+            <div class="auth-header">
+                <span class="eyebrow">Welcome back</span>
+                <h1>Login to <span class="accent-text">Quantum AI</span></h1>
+            </div>
+
+            <form id="signin-form" class="auth-form" novalidate>
+                <div class="form-field">
+                    <label for="signin-email">Email</label>
+                    <input id="signin-email" name="email" type="email" placeholder="you@example.com" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="signin-password">Password</label>
+                    <input id="signin-password" name="password" type="password" placeholder="Enter your password" required>
+                </div>
+
+                <div class="form-message" data-form-message></div>
+                <button type="submit" class="auth-button">Login</button>
+            </form>
+
+            <p class="auth-footer">
+                Need an account? <a href="signup.html">Create one</a>
+            </p>
+        </section>
+    </main>
+
+    <script src="auth.js"></script>
+</body>
+</html>
