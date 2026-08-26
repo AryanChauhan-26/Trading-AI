@@ -105,7 +105,7 @@
                 <p>Track the markets, compare signals, and test ideas across stocks, crypto, forex, and commodities from one polished command center.</p>
                 <div class="hero-actions">
                     <a class="hero-cta hero-cta--primary" href="#chart-container">Open live chart</a>
-                    <a class="hero-cta hero-cta--secondary" href="#btn-execute-trade">Try simulator</a>
+                    <a class="hero-cta hero-cta--secondary" href="simulator.html">Try simulator</a>
                 </div>
             </div>
             <div class="hero-pills">
@@ -129,8 +129,14 @@
             <aside class="sidebar-left card" id="watchlist-section">
                 <div class="card-header">
                     <h2>Market Watch</h2>
-                    <div class="live-indicator">
-                        <span class="pulse-dot"></span> Live
+                    <div class="market-watch-actions">
+                        <div class="live-indicator">
+                            <span class="pulse-dot"></span> Live
+                        </div>
+                        <div class="watchlist-scroll-controls" aria-label="Scroll market watch">
+                            <button type="button" class="watchlist-scroll-button" id="watchlist-scroll-up" aria-label="Scroll market watch up" title="Scroll up">↑</button>
+                            <button type="button" class="watchlist-scroll-button" id="watchlist-scroll-down" aria-label="Scroll market watch down" title="Scroll down">↓</button>
+                        </div>
                     </div>
                 </div>
                 <div class="watchlist-filter">
@@ -188,37 +194,6 @@
                 </div>
             </main>
 
-            <aside class="sidebar-right">
-                <div class="ai-advisory-card card" id="ai-advisory-card">
-                    <div class="card-header border-bottom"><div class="logo-group"><div class="ai-pulse-ring"></div><h2>AI Trading Consultant</h2></div><span class="model-badge">Technical view</span></div>
-                    <div id="ai-card-content" class="ai-card-content">
-                        <div class="advisory-signal-box"><div class="signal-indicator" id="advisory-signal-indicator"><div class="signal-text" id="advisory-signal-text">STRONG BUY</div><div class="signal-percentage" id="advisory-signal-strength">Consensus: <span id="advisory-signal-strength-value">87%</span></div></div></div>
-                        <div class="advisory-targets">
-                            <div class="target-item"><div class="target-label">Entry Range</div><div class="target-value text-indigo" id="target-entry">$261.20 - $262.90</div></div>
-                            <div class="target-item"><div class="target-label">Take Profit 1</div><div class="target-value text-buy" id="target-tp1">$271.50</div></div>
-                            <div class="target-item"><div class="target-label">Take Profit 2</div><div class="target-value text-strong-buy" id="target-tp2">$280.00</div></div>
-                            <div class="target-item"><div class="target-label">Stop Loss</div><div class="target-value text-sell" id="target-sl">$256.00</div></div>
-                        </div>
-                        <div class="advisory-action"><div class="time-lap-summary"><div class="time-lap-item" id="lap-item-5m"><span class="lap-item-label">5m</span></div><div class="time-lap-item" id="lap-item-15m"><span class="lap-item-label">15m</span></div><div class="time-lap-item" id="lap-item-1h"><span class="lap-item-label">1h</span></div><div class="time-lap-item" id="lap-item-1d"><span class="lap-item-label">1D</span></div></div><div class="optimal-lap-badge" id="optimal-lap-badge">Best Time Lap: <span id="best-lap-value">15 Minutes</span></div><button class="btn-apply-targets" id="btn-apply-targets">Apply Advisory Setup to Simulator</button></div>
-                        <div class="advisory-rationale"><h4>AI Rationale</h4><p id="advisory-rationale-text">TSLA shows robust bullish momentum across the selected timeframes.</p></div>
-                    </div>
-                    <div class="ai-analysis-loader"><div class="scanner-animation"><div class="scanner-line"></div></div><div class="loader-text-container"><span class="loader-text">AI is analyzing market data</span><span class="loader-dots"></span></div></div>
-                </div>
-
-                <div class="order-simulator-card card" id="order-simulator-card">
-                    <div class="card-header border-bottom"><h2>Order Simulator</h2><span class="mode-badge">Paper only</span></div>
-                    <div class="demo-trading-guide hidden" id="demo-trading-guide"><div class="demo-guide-title">Demo Trading 101</div><p>Use virtual funds to test a BUY or SELL idea.</p><button class="btn-secondary btn-reset-wallet" id="btn-reset-wallet">Reset Demo Wallet</button></div>
-                    <div class="order-type-tabs"><button class="order-tab buy active" id="order-tab-buy">BUY / LONG</button><button class="order-tab sell" id="order-tab-sell">SELL / SHORT</button></div>
-                    <div class="simulator-inputs">
-                        <div class="input-group"><label for="order-leverage">Leverage: <span id="leverage-display">10x</span></label><input type="range" id="order-leverage" min="1" max="100" value="10" class="slider"></div>
-                        <div class="input-group-row"><div class="input-group"><label for="order-margin">Margin Amount (USD)</label><input type="number" id="order-margin" value="1000" min="10" step="50"></div><div class="input-group"><label>Position Value</label><div class="position-value-display" id="position-value-display">$10,000.00</div></div></div>
-                        <div class="input-group-row"><div class="input-group"><label for="order-tp">Take Profit ($)</label><input type="number" id="order-tp" value="0" step="0.01"></div><div class="input-group"><label for="order-sl">Stop Loss ($)</label><input type="number" id="order-sl" value="0" step="0.01"></div></div>
-                        <div class="risk-reward-estimate"><div class="estimate-row"><span>Est. Qty:</span><span id="estimate-qty" class="text-mono">38.09 units</span></div><div class="estimate-row"><span>Est. Profit (TP1):</span><span id="estimate-profit" class="text-buy text-mono">+$3,428.57</span></div><div class="estimate-row"><span>Est. Loss (SL):</span><span id="estimate-loss" class="text-sell text-mono">-$2,476.19</span></div></div>
-                        <button class="btn-execute buy" id="btn-execute-trade">EXECUTE BUY ORDER</button>
-                    </div>
-                </div>
-            </aside>
-
         </div>
 
         <section class="signal-posts card" aria-labelledby="signal-posts-title">
@@ -230,10 +205,6 @@
             </div>
         </section>
 
-        <section class="journal-section card">
-            <div class="card-header"><div class="journal-tabs"><button class="journal-tab active" data-journal-view="active">Active Positions (<span id="active-positions-count-tab">0</span>)</button><button class="journal-tab" data-journal-view="history">Trade History</button></div><div class="journal-actions"><button class="btn-secondary" id="btn-export-history">Export CSV</button><button class="btn-secondary" id="btn-clear-history">Clear History</button></div></div>
-            <div class="journal-table-wrapper"><table class="journal-table" id="table-active-positions"><thead><tr><th>Asset</th><th>Type</th><th>Leverage</th><th>Quantity</th><th>Margin</th><th>Entry Price</th><th>Current Price</th><th>TP</th><th>SL</th><th>PnL (USD / %)</th><th>Action</th></tr></thead><tbody id="active-positions-body"><tr><td colspan="11" class="empty-journal-message">No active positions. Open a simulated trade above to begin.</td></tr></tbody></table><table class="journal-table hidden" id="table-trade-history"><thead><tr><th>Asset</th><th>Type</th><th>Leverage</th><th>Margin</th><th>Entry Price</th><th>Exit Price</th><th>Final PnL</th><th>Status</th><th>Time</th></tr></thead><tbody id="trade-history-body"><tr><td colspan="9" class="empty-journal-message">No trading history available yet.</td></tr></tbody></table></div>
-        </section>
     </div>
 
     <footer class="app-footer">
