@@ -561,6 +561,42 @@ body::after {
     letter-spacing: -0.2px;
 }
 
+.market-watch-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.watchlist-scroll-controls {
+    display: flex;
+    gap: 3px;
+}
+
+.watchlist-scroll-button {
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    border: 1px solid var(--border-color);
+    border-radius: 7px;
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.04);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    transition: color var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.watchlist-scroll-button:hover:not(:disabled) {
+    color: var(--text-primary);
+    background: rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.35);
+}
+
+.watchlist-scroll-button:disabled {
+    cursor: default;
+    opacity: 0.3;
+}
+
 .border-bottom {
     border-bottom: 1px solid var(--border-color);
 }
@@ -859,6 +895,7 @@ body::after {
 
 .watchlist-list {
     flex: 1;
+    max-height: 520px;
     overflow-y: scroll; /* Changed to 'scroll' to always show scrollbar */
     padding: 8px;
     display: flex;
@@ -2744,6 +2781,10 @@ body::after {
         flex-direction: column;
         gap: 8px;
         padding: 16px 18px;
+    }
+
+    .watchlist-list {
+        max-height: 390px;
     }
 }
 
