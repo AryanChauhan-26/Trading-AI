@@ -738,6 +738,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const categoryTabs = document.querySelectorAll(".watchlist-filter:not(.secondary-filter) .filter-tab");
     const countryTabs = document.querySelectorAll("#country-filter-container .filter-tab");
     const searchInput = document.getElementById("symbol-search");
+    const watchlistScrollUp = document.getElementById("watchlist-scroll-up");
+    const watchlistScrollDown = document.getElementById("watchlist-scroll-down");
 
     // Header stats
     const elBalance = document.getElementById("account-balance");
@@ -1302,6 +1304,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             watchlistContainer.appendChild(itemDiv);
         });
+
+        updateWatchlistScrollControls();
     }
 
     // Periodically updates prices in the sidebar list (runs every tick)
@@ -1944,6 +1948,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // --- UI EVENT LISTENERS ---
+
+    function updateWatchlistScrollControls() {
+        if (!watchlistContainer || !watchlistScrollUp || !watchlistScrollDown) return;
+        const maxScrollTop = watchlistContainer.scrollHeight - watchlistContainer.clientHeight;
+        watchlistScrollUp.disabled = watchlistContainer.scrollTop <= 1;
+        watchlistScrollDown.disabled = watchlistContainer.scrollTop >= maxScrollTop - 1;
+    }
+
+    if (watchlistContainer && watchlistScrollUp && watchlistScrollDown) {
+        watchlistScrollUp.addEventListener("click", () => {
+            watchlistContainer.scrollBy({ top: -220, behavior: "smooth" });
+        });
+        watchlistScrollDown.addEventListener("click", () => {
+            watchlistContainer.scrollBy({ top: 220, behavior: "smooth" });
+        });
+        watchlistContainer.addEventListener("scroll", updateWatchlistScrollControls, { passive: true });
+        window.addEventListener("resize", updateWatchlistScrollControls);
+        updateWatchlistScrollControls();
+    }
 
     // Signal posts jump directly to the matching live chart and analysis.
     document.querySelectorAll("[data-signal-symbol]").forEach(postLink => {
