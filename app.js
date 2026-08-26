@@ -1945,6 +1945,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- UI EVENT LISTENERS ---
 
+    // Signal posts jump directly to the matching live chart and analysis.
+    document.querySelectorAll("[data-signal-symbol]").forEach(postLink => {
+        postLink.addEventListener("click", event => {
+            event.preventDefault();
+            const asset = assetsData.find(item => item.id === postLink.dataset.signalSymbol);
+            if (!asset) return;
+            selectAsset(asset);
+            document.getElementById("chart-container")?.scrollIntoView({ behavior: "smooth", block: "center" });
+        });
+    });
+
     // Search bar functionality
     searchInput.addEventListener("input", () => {
         renderWatchlist();
