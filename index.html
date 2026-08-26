@@ -151,7 +151,89 @@
                 </div>
             </aside>
 
+            <main class="main-content">
+                <div class="ticker-banner card">
+                    <div class="ticker-info">
+                        <div class="ticker-meta">
+                            <span class="ticker-category-badge" id="active-category">STOCKS</span>
+                            <span class="ticker-exchange" id="active-exchange">NASDAQ</span>
+                            <span class="market-status-badge open" id="market-status-badge">Market Open</span>
+                        </div>
+                        <h2 class="ticker-full-name" id="active-full-name">Tesla Inc.</h2>
+                        <h3 class="ticker-symbol-name" id="active-symbol">TSLA</h3>
+                    </div>
+                    <div class="ticker-price-container">
+                        <div class="market-clock-display" id="market-clock-display">--:--:--</div>
+                        <div class="ticker-live-price" id="active-live-price">$262.50</div>
+                        <div class="ticker-change" id="active-price-change">+3.42 (+1.32%)</div>
+                    </div>
+                </div>
+
+                <div class="chart-panel card">
+                    <div class="chart-header">
+                        <div class="chart-title-group">
+                            <svg class="chart-title-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 3V21H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18.5 7.5L14.5 13.5L9.5 9.5L5.5 15.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            <h3>TradingView Advanced Chart</h3>
+                        </div>
+                        <div class="timeframe-selector" id="chart-timeframe-selector">
+                            <button class="timeframe-btn" data-tv-interval="1">1m</button>
+                            <button class="timeframe-btn" data-tv-interval="5">5m</button>
+                            <button class="timeframe-btn active" data-tv-interval="15">15m</button>
+                            <button class="timeframe-btn" data-tv-interval="60">1h</button>
+                            <button class="timeframe-btn" data-tv-interval="240">4h</button>
+                            <button class="timeframe-btn" data-tv-interval="D">1D</button>
+                        </div>
+                    </div>
+                    <div class="chart-container-wrapper"><div id="chart-container" class="tradingview-container-element"></div></div>
+                </div>
+            </main>
+
+            <aside class="sidebar-right">
+                <div class="ai-advisory-card card" id="ai-advisory-card">
+                    <div class="card-header border-bottom"><div class="logo-group"><div class="ai-pulse-ring"></div><h2>AI Trading Consultant</h2></div><span class="model-badge">Technical view</span></div>
+                    <div id="ai-card-content" class="ai-card-content">
+                        <div class="advisory-signal-box"><div class="signal-indicator" id="advisory-signal-indicator"><div class="signal-text" id="advisory-signal-text">STRONG BUY</div><div class="signal-percentage" id="advisory-signal-strength">Consensus: <span id="advisory-signal-strength-value">87%</span></div></div></div>
+                        <div class="advisory-targets">
+                            <div class="target-item"><div class="target-label">Entry Range</div><div class="target-value text-indigo" id="target-entry">$261.20 - $262.90</div></div>
+                            <div class="target-item"><div class="target-label">Take Profit 1</div><div class="target-value text-buy" id="target-tp1">$271.50</div></div>
+                            <div class="target-item"><div class="target-label">Take Profit 2</div><div class="target-value text-strong-buy" id="target-tp2">$280.00</div></div>
+                            <div class="target-item"><div class="target-label">Stop Loss</div><div class="target-value text-sell" id="target-sl">$256.00</div></div>
+                        </div>
+                        <div class="advisory-action"><div class="time-lap-summary"><div class="time-lap-item" id="lap-item-5m"><span class="lap-item-label">5m</span></div><div class="time-lap-item" id="lap-item-15m"><span class="lap-item-label">15m</span></div><div class="time-lap-item" id="lap-item-1h"><span class="lap-item-label">1h</span></div><div class="time-lap-item" id="lap-item-1d"><span class="lap-item-label">1D</span></div></div><div class="optimal-lap-badge" id="optimal-lap-badge">Best Time Lap: <span id="best-lap-value">15 Minutes</span></div><button class="btn-apply-targets" id="btn-apply-targets">Apply Advisory Setup to Simulator</button></div>
+                        <div class="advisory-rationale"><h4>AI Rationale</h4><p id="advisory-rationale-text">TSLA shows robust bullish momentum across the selected timeframes.</p></div>
+                    </div>
+                    <div class="ai-analysis-loader"><div class="scanner-animation"><div class="scanner-line"></div></div><div class="loader-text-container"><span class="loader-text">AI is analyzing market data</span><span class="loader-dots"></span></div></div>
+                </div>
+
+                <div class="order-simulator-card card" id="order-simulator-card">
+                    <div class="card-header border-bottom"><h2>Order Simulator</h2><span class="mode-badge">Paper only</span></div>
+                    <div class="demo-trading-guide hidden" id="demo-trading-guide"><div class="demo-guide-title">Demo Trading 101</div><p>Use virtual funds to test a BUY or SELL idea.</p><button class="btn-secondary btn-reset-wallet" id="btn-reset-wallet">Reset Demo Wallet</button></div>
+                    <div class="order-type-tabs"><button class="order-tab buy active" id="order-tab-buy">BUY / LONG</button><button class="order-tab sell" id="order-tab-sell">SELL / SHORT</button></div>
+                    <div class="simulator-inputs">
+                        <div class="input-group"><label for="order-leverage">Leverage: <span id="leverage-display">10x</span></label><input type="range" id="order-leverage" min="1" max="100" value="10" class="slider"></div>
+                        <div class="input-group-row"><div class="input-group"><label for="order-margin">Margin Amount (USD)</label><input type="number" id="order-margin" value="1000" min="10" step="50"></div><div class="input-group"><label>Position Value</label><div class="position-value-display" id="position-value-display">$10,000.00</div></div></div>
+                        <div class="input-group-row"><div class="input-group"><label for="order-tp">Take Profit ($)</label><input type="number" id="order-tp" value="0" step="0.01"></div><div class="input-group"><label for="order-sl">Stop Loss ($)</label><input type="number" id="order-sl" value="0" step="0.01"></div></div>
+                        <div class="risk-reward-estimate"><div class="estimate-row"><span>Est. Qty:</span><span id="estimate-qty" class="text-mono">38.09 units</span></div><div class="estimate-row"><span>Est. Profit (TP1):</span><span id="estimate-profit" class="text-buy text-mono">+$3,428.57</span></div><div class="estimate-row"><span>Est. Loss (SL):</span><span id="estimate-loss" class="text-sell text-mono">-$2,476.19</span></div></div>
+                        <button class="btn-execute buy" id="btn-execute-trade">EXECUTE BUY ORDER</button>
+                    </div>
+                </div>
+            </aside>
+
         </div>
+
+        <section class="signal-posts card" aria-labelledby="signal-posts-title">
+            <div class="signal-posts__heading"><div><p class="section-kicker">TradingView watch notes</p><h2 id="signal-posts-title">Signals worth a closer look</h2></div><span class="signal-posts__timestamp">Updated from simulated market feed</span></div>
+            <div class="signal-post-grid">
+                <article class="signal-post signal-post--buy"><div class="signal-post__top"><span class="post-source">TV / 15m</span><span class="signal-post__badge">BUY</span></div><h3>NVDA momentum is holding</h3><p>Price is above short-term support with volume expanding. Watch for a clean continuation before entering.</p><a href="#chart-container" class="signal-post__link" data-signal-symbol="NVDA">View NVDA chart <span>↗</span></a></article>
+                <article class="signal-post signal-post--sell"><div class="signal-post__top"><span class="post-source">TV / 1h</span><span class="signal-post__badge">SELL</span></div><h3>MSFT trend is losing support</h3><p>Bearish structure is developing below resistance. A failed retest is the confirmation to watch.</p><a href="#chart-container" class="signal-post__link" data-signal-symbol="MSFT">View MSFT chart <span>↗</span></a></article>
+                <article class="signal-post signal-post--wait"><div class="signal-post__top"><span class="post-source">TV / 1D</span><span class="signal-post__badge">WAIT</span></div><h3>AAPL needs direction</h3><p>Mixed timeframes and a tight range make patience the higher-quality trade until price breaks out.</p><a href="#chart-container" class="signal-post__link" data-signal-symbol="AAPL">View AAPL chart <span>↗</span></a></article>
+            </div>
+        </section>
+
+        <section class="journal-section card">
+            <div class="card-header"><div class="journal-tabs"><button class="journal-tab active" data-journal-view="active">Active Positions (<span id="active-positions-count-tab">0</span>)</button><button class="journal-tab" data-journal-view="history">Trade History</button></div><div class="journal-actions"><button class="btn-secondary" id="btn-export-history">Export CSV</button><button class="btn-secondary" id="btn-clear-history">Clear History</button></div></div>
+            <div class="journal-table-wrapper"><table class="journal-table" id="table-active-positions"><thead><tr><th>Asset</th><th>Type</th><th>Leverage</th><th>Quantity</th><th>Margin</th><th>Entry Price</th><th>Current Price</th><th>TP</th><th>SL</th><th>PnL (USD / %)</th><th>Action</th></tr></thead><tbody id="active-positions-body"><tr><td colspan="11" class="empty-journal-message">No active positions. Open a simulated trade above to begin.</td></tr></tbody></table><table class="journal-table hidden" id="table-trade-history"><thead><tr><th>Asset</th><th>Type</th><th>Leverage</th><th>Margin</th><th>Entry Price</th><th>Exit Price</th><th>Final PnL</th><th>Status</th><th>Time</th></tr></thead><tbody id="trade-history-body"><tr><td colspan="9" class="empty-journal-message">No trading history available yet.</td></tr></tbody></table></div>
+        </section>
     </div>
 
     <footer class="app-footer">
