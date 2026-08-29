@@ -846,6 +846,29 @@ document.addEventListener("DOMContentLoaded", () => {
         { id: 'EURUSD', display: 'EUR/USD' }
     ];
 
+    function updateHomeMarketCards() {
+        const symbols = ["TSLA", "MSFT", "NVDA", "BTCUSD", "EURUSD"];
+
+        symbols.forEach(symbol => {
+            const asset = assetsData.find(item => item.id === symbol);
+            const card = document.querySelector(`.market-card[data-symbol="${symbol}"]`);
+            if (!asset || !card) return;
+
+            const priceUSD = livePrices[asset.id] ?? asset.basePriceUSD;
+            const changePercent = ((priceUSD - asset.basePriceUSD) / asset.basePriceUSD) * 100;
+            const changeDirection = changePercent >= 0 ? "buy" : "sell";
+            const sign = changePercent >= 0 ? "+" : "";
+
+            const strong = card.querySelector("strong");
+            const small = card.querySelector("small");
+            if (strong) strong.textContent = formatCurrency(priceUSD, asset.priceDecimals);
+            if (small) small.textContent = `${sign}${changePercent.toFixed(2)}%`;
+
+            card.classList.remove("market-card--buy", "market-card--sell", "market-card--neutral");
+            card.classList.add(changePercent > 0 ? "market-card--buy" : changePercent < 0 ? "market-card--sell" : "market-card--neutral");
+        });
+    }
+
     function initializeMarketTicker() {
         if (!marketTickerTrack) return;
 
@@ -1173,6 +1196,7 @@ document.addEventListener("DOMContentLoaded", () => {
             updatePositionsPnL();
             // Update the market ticker
             updateMarketTicker();
+            updateHomeMarketCards();
         }, 1000);
     }
 
@@ -1283,9 +1307,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             `;
 
-            // The main click listener for selecting an asset
+            // The main click listener for selecting an asset and opening its detail page in a new tab
             itemDiv.addEventListener("click", () => {
                 selectAsset(asset);
+                const detailUrl = `share-details.html?symbol=${encodeURIComponent(asset.id)}`;
+                const detailWindow = window.open(detailUrl, "_blank", "noopener,noreferrer");
+                if (detailWindow) detailWindow.opener = null;
             });
 
             // Event listener for the favorite button
@@ -2224,6 +2251,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (inputTP && inputSL) {
             fillAdvisorySetup();
         }
+        updateHomeMarketCards();
     }
 
     currencySelector.value = activeCurrency; // Set initial currency selector value
@@ -2233,6 +2261,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 2. Render initial UI elements
     initializeMarketTicker();
+    updateHomeMarketCards();
     updateBalanceUI();
     renderWatchlist();
     renderActivePositions();
