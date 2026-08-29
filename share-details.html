@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share Analysis | Quantum Trading AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="share-analysis-page">
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+
+    <div class="app-container">
+        <header class="app-header live-watchlist-header">
+            <a class="header-logo live-watchlist-brand" href="index.html" aria-label="Back to Quantum Trading AI home">
+                <div class="logo-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="url(#logoGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs><linearGradient id="logoGrad" x1="3" y1="2" x2="21" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#10B981"/><stop offset="0.5" stop-color="#6366F1"/><stop offset="1" stop-color="#06B6D4"/></linearGradient></defs>
+                    </svg>
+                </div>
+                <h1>Quantum Trading <span class="accent-text">AI</span></h1>
+            </a>
+            <div class="live-watchlist-header-actions">
+                <span class="header-chip">Detailed share analysis</span>
+                <a class="btn-secondary live-back-link" href="live-watchlist.html">Back to watchlist</a>
+            </div>
+        </header>
+
+        <main class="share-analysis-shell">
+            <section class="share-analysis-header card">
+                <div class="share-analysis-header__info">
+                    <span class="share-analysis-header__eyebrow">Asset analysis</span>
+                    <h1 id="share-title">Loading share...</h1>
+                    <div class="share-analysis-header__meta">
+                        <span id="share-meta">Market</span>
+                        <span id="share-market">Category</span>
+                        <span id="share-date">Date</span>
+                    </div>
+                </div>
+                <div class="analysis-header-actions">
+                    <div id="signal-badge" class="choice-badge buy">BUY</div>
+                </div>
+            </section>
+
+            <div class="share-detail-grid">
+                <section class="analysis-card card">
+                    <div class="price-card">
+                        <div>
+                            <p class="hero-eyebrow">Live price</p>
+                            <div class="main-price" id="share-price">$0.00</div>
+                            <div class="main-price-change text-buy" id="share-change">+0.00%</div>
+                        </div>
+                        <span class="market-pill" id="market-pill">NASDAQ</span>
+                    </div>
+
+                    <div class="analysis-grid">
+                        <div class="metric-box">
+                            <span>Day range</span>
+                            <strong id="day-range">--</strong>
+                        </div>
+                        <div class="metric-box">
+                            <span>Signal score</span>
+                            <strong id="signal-score">--</strong>
+                        </div>
+                        <div class="metric-box">
+                            <span>Risk / Reward</span>
+                            <strong id="risk-reward">--</strong>
+                        </div>
+                    </div>
+                </section>
+
+                <aside class="analysis-panel card">
+                    <h3>Trade setup</h3>
+                    <div class="trade-rows">
+                        <div class="trade-row">
+                            <span>Entry</span>
+                            <strong id="entry-price">--</strong>
+                        </div>
+                        <div class="trade-row">
+                            <span>Stop loss</span>
+                            <strong id="stop-loss">--</strong>
+                        </div>
+                        <div class="trade-row">
+                            <span>Take profit</span>
+                            <strong id="take-profit">--</strong>
+                        </div>
+                        <div class="trade-row">
+                            <span>Position size</span>
+                            <strong id="position-size">--</strong>
+                        </div>
+                    </div>
+
+                    <div class="action-button-row">
+                        <a class="btn-primary" href="simulator.html">Open simulator</a>
+                        <a class="btn-secondary" href="live-watchlist.html">Market feed</a>
+                    </div>
+                </aside>
+            </div>
+
+            <section class="analysis-card card" style="margin-top: 22px;">
+                <h2>AI technical analysis</h2>
+                <div class="summary-note" id="analysis-summary">Loading analysis...</div>
+                <ul class="analysis-list" id="analysis-points"></ul>
+            </section>
+        </main>
+    </div>
+
+    <footer class="app-footer">
+        <a href="index.html">Trading App</a>
+        <a href="ai-signals.html">AI Signals</a>
+        <a href="about.html">About</a>
+        <a href="disclaimer.html">Disclaimer</a>
+        <span>Quantum Trading AI is a simulated platform for educational purposes.</span>
+    </footer>
+
+    <script src="share-details.js"></script>
+</body>
+</html>
