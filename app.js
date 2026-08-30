@@ -1392,7 +1392,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (document.getElementById("chart-container")) {
             loadMainChart(asset.tvSymbol, activeTimeframe);
         }
-
         if (aiCardContent) {
             aiCardContent.classList.add("analyzing");
         }
