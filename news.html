@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market News - Quantum Trading AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="static.css">
+</head>
+<body class="news-page">
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <main class="static-container news-container">
+        <header class="static-header news-header">
+            <div>
+                <span class="header-chip">TradingView news</span>
+                <h1>Market <span class="accent-text">News</span></h1>
+                <p>Latest headlines for the shares you follow, presented in one focused feed.</p>
+            </div>
+            <a href="index.html" class="btn-secondary btn-header-action">
+                <span class="btn-header-action__icon">←</span>
+                <span>Back to dashboard</span>
+            </a>
+        </header>
+
+        <section class="news-panel card" aria-labelledby="news-feed-title">
+            <div class="news-panel__toolbar">
+                <div>
+                    <p class="section-kicker">Live feed</p>
+                    <h2 id="news-feed-title"><span id="news-symbol-name">Tesla</span> news</h2>
+                </div>
+                <div class="news-symbols" aria-label="Choose a share">
+                    <button class="news-symbol is-active" type="button" data-symbol="NASDAQ:TSLA" data-name="Tesla">TSLA</button>
+                    <button class="news-symbol" type="button" data-symbol="NASDAQ:NVDA" data-name="NVIDIA">NVDA</button>
+                    <button class="news-symbol" type="button" data-symbol="NASDAQ:AAPL" data-name="Apple">AAPL</button>
+                    <button class="news-symbol" type="button" data-symbol="NASDAQ:MSFT" data-name="Microsoft">MSFT</button>
+                    <button class="news-symbol" type="button" data-symbol="NSE:RELIANCE" data-name="Reliance">RELIANCE</button>
+                </div>
+            </div>
+            <p class="news-panel__note">Headlines are supplied by TradingView. Select a symbol to update this feed.</p>
+            <div id="tradingview-news-feed" class="news-feed-widget" aria-live="polite" aria-label="TradingView market news"></div>
+        </section>
+    </main>
+
+    <script src="news.js"></script>
+</body>
+</html>
