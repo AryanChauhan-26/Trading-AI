@@ -3022,6 +3022,12 @@ body::after {
     .watchlist-list {
         max-height: 390px;
     }
+
+    .signal-posts {
+        padding: 18px;
+    }
+
+    .signal-post-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 520px) {
