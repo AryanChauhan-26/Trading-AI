@@ -73,6 +73,80 @@
     max-width: 1200px;
 }
 
+/* Market news page */
+.news-container { max-width: 1180px; }
+
+.news-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    text-align: left;
+}
+
+.news-header h1 { margin-top: 12px; }
+.news-header p { margin: 0; }
+
+.news-panel { padding: 22px; }
+
+.news-panel__toolbar {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 0 2px 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.news-panel__toolbar h2 {
+    margin-top: 5px;
+    font-size: 25px;
+    letter-spacing: -0.04em;
+}
+
+.news-symbols {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.news-symbol {
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 999px;
+    padding: 8px 11px;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    transition: var(--transition-fast);
+}
+
+.news-symbol:hover,
+.news-symbol.is-active {
+    border-color: rgba(6, 182, 212, 0.42);
+    background: rgba(6, 182, 212, 0.12);
+    color: var(--color-cyan);
+}
+
+.news-panel__note {
+    margin: 14px 2px;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.news-feed-widget { height: 820px; }
+
+.news-feed-widget,
+.news-feed-widget .tradingview-widget-container,
+.news-feed-widget .tradingview-widget-container__widget,
+.news-feed-widget iframe {
+    width: 100% !important;
+    height: 100% !important;
+}
+
 .signal-header {
     display: flex;
     justify-content: space-between;
@@ -605,6 +679,11 @@
 }
 
 @media (max-width: 900px) {
+    .news-header,
+    .news-panel__toolbar { align-items: flex-start; flex-direction: column; }
+
+    .news-symbols { justify-content: flex-start; }
+
     .signal-header {
         flex-direction: column;
         align-items: flex-start;
@@ -634,6 +713,8 @@
 }
 
 @media (max-width: 560px) {
+    .news-feed-widget { height: 660px; }
+
     .signal-topbar {
         grid-template-columns: 1fr;
     }
