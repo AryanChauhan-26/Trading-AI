@@ -1631,10 +1631,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Deduct balance
-        userBalanceUSD -= marginUSD; // Deduct from USD balance
-        updateBalanceUI();
-
         // Calculate position details
         const positionValueUSD = marginUSD * leverage;
         const qty = positionValueUSD / entryPriceUSD;
@@ -1665,6 +1661,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
         }
+
+        // Only commit the balance change after every validation has passed.
+        // Previously an invalid TP/SL submitted after the balance check could
+        // deduct funds even though no position was created.
+        userBalanceUSD -= marginUSD;
+        updateBalanceUI();
 
         const newTrade = {
             id: "trade_" + Date.now(),
