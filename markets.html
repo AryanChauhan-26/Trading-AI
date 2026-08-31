@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markets | Quantum Trading AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="markets-page">
+    <div class="bg-glow bg-glow-1"></div><div class="bg-glow bg-glow-2"></div><div class="bg-glow bg-glow-3"></div>
+    <main class="markets-shell">
+        <header class="markets-page-header card">
+            <div><p class="hero-eyebrow">Trading desk / global overview</p><h1>Global <span class="accent-text">Markets</span></h1><p>Track leading stocks, crypto, forex, and commodities from one screen.</p></div>
+            <div class="markets-header-actions"><span class="live-indicator"><span class="pulse-dot"></span> Simulated live feed</span><a class="btn-secondary" href="index.html">Back to dashboard</a></div>
+        </header>
+        <section class="markets-summary" aria-label="Market summary">
+            <article class="markets-summary-card card"><span>Markets tracked</span><strong id="market-count">0</strong></article>
+            <article class="markets-summary-card card"><span>Advancing</span><strong class="text-buy" id="advancing-count">0</strong></article>
+            <article class="markets-summary-card card"><span>Declining</span><strong class="text-sell" id="declining-count">0</strong></article>
+            <article class="markets-summary-card card"><span>Last update</span><strong class="font-mono" id="markets-updated">--:--</strong></article>
+        </section>
+        <section class="markets-panel card">
+            <div class="markets-panel-header"><div><h2>Market board</h2><p>Quotes refresh automatically.</p></div><div class="markets-filters" aria-label="Market category"><button class="market-filter active" data-category="all">All</button><button class="market-filter" data-category="stocks">Stocks</button><button class="market-filter" data-category="crypto">Crypto</button><button class="market-filter" data-category="forex">Forex</button><button class="market-filter" data-category="commodities">Commodities</button></div></div>
+            <div class="markets-grid" id="markets-grid" aria-live="polite"></div>
+        </section>
+    </main>
+    <footer class="app-footer"><a href="index.html">Trading App</a><a href="watchlist.html">Watchlist</a><a href="ai-signals.html">AI Signals</a><a href="about.html">About</a><span>Quantum Trading AI is a simulated platform for educational purposes.</span></footer>
+    <script src="markets.js"></script>
+</body>
+</html>
