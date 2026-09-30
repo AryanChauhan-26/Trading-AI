@@ -51,12 +51,7 @@ html {
 
 body {
     background-color: var(--bg-darker);
-    background-image:
-        radial-gradient(ellipse at 14% 0%, rgba(79, 70, 229, 0.06), transparent 40%),
-        radial-gradient(ellipse at 90% 8%, rgba(6, 182, 212, 0.04), transparent 35%),
-        radial-gradient(ellipse at 50% 100%, rgba(79, 70, 229, 0.04), transparent 48%),
-        linear-gradient(145deg, #FFFFFF 0%, #F8F9FA 45%, #FFFFFF 100%);
-    background-size: auto;
+    background-image: linear-gradient(145deg, #FFFFFF 0%, #F8F9FA 48%, #FFFFFF 100%);
     color: var(--text-primary);
     overflow-x: hidden;
     font-size: 15px;
@@ -65,63 +60,13 @@ body {
     background-attachment: fixed;
 }
 
-/* Smooth ambient light creates a clean professional backdrop */
-body::before,
-body::after {
-    content: "";
-    position: fixed;
-    border-radius: 50%;
-    pointer-events: none;
-    filter: blur(120px);
-    opacity: 0.15;
-    z-index: 0;
-    animation: floatOrb 14s ease-in-out infinite alternate;
-}
-
-body::before {
-    width: 340px;
-    height: 340px;
-    top: -130px;
-    right: -100px;
-    background: rgba(79, 70, 229, 0.15);
-}
-
-body::after {
-    width: 270px;
-    height: 270px;
-    bottom: 8%;
-    left: -100px;
-    background: rgba(6, 182, 212, 0.1);
-    animation-delay: -5s;
-}
-
 .bg-glow {
-    position: absolute;
-    width: 580px;
-    height: 580px;
-    border-radius: 50%;
-    filter: blur(150px);
-    opacity: 0.08;
-    pointer-events: none;
-    z-index: 0;
+    display: none;
 }
 
-.bg-glow-1 {
-    background: radial-gradient(circle, rgba(79, 70, 229, 0.3) 0%, transparent 70%);
-    top: -100px;
-    right: -100px;
-}
-
-.bg-glow-2 {
-    background: radial-gradient(circle, rgba(6, 182, 212, 0.2) 0%, transparent 70%);
-    bottom: 20%;
-    left: -200px;
-}
-
-.bg-glow-3 {
-    background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
-    top: 40%;
-    right: 15%;
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+    outline: 3px solid rgba(79, 70, 229, 0.55);
+    outline-offset: 2px;
 }
 
 /* Scrollbar customization */
@@ -321,7 +266,10 @@ body::after {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: thin;
     position: relative;
     z-index: 1;
     padding: 6px 8px;
@@ -335,6 +283,8 @@ body::after {
     align-items: center;
     justify-content: center;
     padding: 8px 12px;
+    min-height: 40px;
+    white-space: nowrap;
     border-radius: 999px;
     font-size: 11px;
     letter-spacing: 0.08em;
@@ -356,7 +306,10 @@ body::after {
     display: flex;
     align-items: center;
     gap: 8px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: thin;
     position: relative;
     z-index: 1;
 }
@@ -372,6 +325,8 @@ body::after {
     text-transform: uppercase;
     font-weight: 700;
     padding: 7px 10px;
+    min-height: 40px;
+    white-space: nowrap;
     cursor: pointer;
     transition: all 0.2s ease;
 }
@@ -452,8 +407,7 @@ body::after {
 }
 
 .card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 20px 46px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.07);
     border-color: rgba(79, 70, 229, 0.2);
 }
 
@@ -3140,11 +3094,6 @@ body::after {
         padding: 11px 12px;
     }
 
-    .bg-glow {
-        width: 100vw;
-        max-width: 100vw;
-    }
-
     .app-container {
         padding: 14px 14px 20px;
         width: 100%;
@@ -3155,6 +3104,13 @@ body::after {
         flex-direction: column;
         align-items: stretch;
         padding: 16px;
+    }
+
+    .header-nav,
+    .market-toolbar-tabs {
+        justify-content: flex-start;
+        width: 100%;
+        padding: 4px;
     }
 
     .header-search {
@@ -3255,6 +3211,17 @@ body::after {
 
     .ticker-live-price {
         font-size: 24px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }
 
