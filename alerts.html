@@ -3,35 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alerts | Quantum Trading AI</title>
+    <meta name="theme-color" content="#f5f7f8">
+    <title>Price alerts | Quantum Trading AI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="alerts.css">
 </head>
 <body class="alerts-page">
-    <div class="bg-glow bg-glow-1"></div><div class="bg-glow bg-glow-2"></div><div class="bg-glow bg-glow-3"></div>
     <main class="alerts-shell">
-        <header class="alerts-page-header card"><div><p class="hero-eyebrow">Trading desk / notifications</p><h1>Market <span class="accent-text">Alerts</span></h1><p>Set a target price and keep your next move in view.</p></div><a class="btn-secondary" href="index.html">Back to dashboard</a></header>
-        <div class="alerts-layout">
-            <section class="alert-form-panel card" aria-labelledby="create-alert-title">
-                <div><p class="section-kicker">New notification</p><h2 id="create-alert-title">Create price alert</h2></div>
-                <form id="alert-form" class="alert-form">
-                    <label>Symbol<input id="alert-symbol" name="symbol" placeholder="e.g. NVDA" maxlength="12" required></label>
-                    <label>Condition<select id="alert-condition" name="condition"><option value="above">Moves above</option><option value="below">Drops below</option></select></label>
-                    <label>Target price<input id="alert-price" name="price" type="number" min="0.0001" step="any" placeholder="e.g. 130.00" required></label>
-                    <button class="hero-cta hero-cta--primary" type="submit">Create alert</button>
+        <header class="alerts-topbar">
+            <a class="alerts-brand" href="index.html" aria-label="Quantum Trading AI home">
+                <span class="alerts-brand__mark" aria-hidden="true">Q</span>
+                <span>Quantum<span>Trading AI</span></span>
+            </a>
+            <nav class="alerts-nav" aria-label="Main navigation">
+                <a href="index.html">Overview</a>
+                <a href="live-watchlist.html">Live watch</a>
+                <a href="markets.html">Markets</a>
+                <a class="is-current" href="alerts.html" aria-current="page">Alerts</a>
+                <a href="ai-signals.html">AI signals</a>
+            </nav>
+            <a class="alerts-topbar__action" href="index.html">Back to dashboard <span aria-hidden="true">↗</span></a>
+        </header>
+
+        <section class="alerts-hero" aria-labelledby="alerts-title">
+            <div class="alerts-hero__copy">
+                <div class="alerts-kicker"><span class="alerts-kicker__dot"></span> Stay ahead of the move</div>
+                <h1 id="alerts-title">Price alerts<span>.</span></h1>
+                <p>Set the levels that matter. We’ll keep them organized so you can focus on your next move.</p>
+                <div class="alerts-hero__meta">
+                    <span><span aria-hidden="true">◷</span> Personal alert center</span>
+                    <span class="alerts-hero__divider" aria-hidden="true"></span>
+                    <span>Saved in this browser</span>
+                </div>
+            </div>
+            <div class="alerts-hero__art" aria-hidden="true">
+                <div class="alerts-hero__orbit alerts-hero__orbit--outer"></div>
+                <div class="alerts-hero__orbit alerts-hero__orbit--inner"></div>
+                <div class="alerts-hero__signal"><span></span><span></span><span></span></div>
+                <div class="alerts-hero__float"><span class="alerts-hero__float-icon">↗</span><span><small>PRICE LEVEL</small><strong>IN FOCUS</strong></span></div>
+                <span class="alerts-hero__art-label">ALERTS · READY</span>
+            </div>
+        </section>
+
+        <section class="alerts-workspace" aria-label="Manage price alerts">
+            <section class="alerts-create" aria-labelledby="create-alert-title">
+                <div class="alerts-panel-heading">
+                    <div>
+                        <p class="alerts-section-label">Make your move</p>
+                        <h2 id="create-alert-title">Create an alert</h2>
+                    </div>
+                    <span class="alerts-panel-icon" aria-hidden="true">＋</span>
+                </div>
+                <p class="alerts-panel-intro">Choose a market and the price level you want to keep an eye on.</p>
+                <form id="alert-form" class="alerts-form">
+                    <label for="alert-symbol">Symbol</label>
+                    <input id="alert-symbol" name="symbol" placeholder="e.g. NVDA" maxlength="12" autocomplete="off" required>
+
+                    <label for="alert-condition">Trigger when price</label>
+                    <select id="alert-condition" name="condition">
+                        <option value="above">Moves above</option>
+                        <option value="below">Drops below</option>
+                    </select>
+
+                    <label for="alert-price">Target price</label>
+                    <div class="alerts-price-input"><span aria-hidden="true">$</span><input id="alert-price" name="price" type="number" min="0.0001" step="any" placeholder="0.00" required></div>
+                    <button class="alerts-submit" type="submit"><span>Create price alert</span><span aria-hidden="true">→</span></button>
                 </form>
-                <p class="alert-form-note">Alerts are saved only in this browser and use simulated prices.</p>
+                <div class="alerts-form-note"><span aria-hidden="true">ⓘ</span><p>Alerts are stored in this browser and use simulated prices.</p></div>
             </section>
-            <section class="alerts-list-panel card" aria-labelledby="active-alerts-title">
-                <div class="alerts-list-header"><div><p class="section-kicker">Alert center</p><h2 id="active-alerts-title">Active alerts</h2></div><span class="alerts-count"><span id="alerts-count">0</span> active</span></div>
-                <div id="alerts-list" class="alerts-list" aria-live="polite"></div>
-                <p id="alerts-empty" class="alerts-empty">No alerts yet. Create one to start tracking a price level.</p>
+
+            <section class="alerts-list-panel" aria-labelledby="active-alerts-title">
+                <div class="alerts-list-header">
+                    <div>
+                        <p class="alerts-section-label">Your watchpoints</p>
+                        <h2 id="active-alerts-title">Active alerts <span class="alerts-count" id="alerts-count">0</span></h2>
+                    </div>
+                    <span class="alerts-live"><span></span> Monitoring</span>
+                </div>
+                <div class="alerts-list" id="alerts-list" aria-live="polite"></div>
+                <div id="alerts-empty" class="alerts-empty">
+                    <span class="alerts-empty__icon" aria-hidden="true">
+                        <svg viewBox="0 0 48 48" fill="none"><path d="M15 20a9 9 0 0 1 18 0c0 11 5 12 5 15H10c0-3 5-4 5-15Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M20 39h8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M24 8V5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                    </span>
+                    <strong>No alerts just yet</strong>
+                    <p>Create your first price alert and it’ll show up here.</p>
+                </div>
+                <div class="alerts-list-foot"><span class="alerts-list-foot__dot"></span> Your alerts are private to this device.</div>
             </section>
-        </div>
+        </section>
     </main>
-    <footer class="app-footer"><a href="index.html">Trading App</a><a href="watchlist.html">Watchlist</a><a href="markets.html">Markets</a><a href="ai-signals.html">AI Signals</a><span>Quantum Trading AI is a simulated platform for educational purposes.</span></footer>
+
+    <footer class="alerts-footer">
+        <a href="index.html">Trading App</a>
+        <a href="watchlist.html">Watchlist</a>
+        <a href="markets.html">Markets</a>
+        <a href="ai-signals.html">AI Signals</a>
+        <span>Quantum Trading AI is a simulated platform for educational purposes.</span>
+    </footer>
     <script src="alerts.js"></script>
 </body>
 </html>
