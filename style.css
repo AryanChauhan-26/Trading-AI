@@ -60,6 +60,25 @@ body {
     background-attachment: fixed;
 }
 
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.2, 0.65, 0.3, 1);
+}
+
+.scroll-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scroll-reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+
 .bg-glow {
     display: none;
 }
