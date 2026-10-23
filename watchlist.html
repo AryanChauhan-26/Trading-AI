@@ -11,30 +11,59 @@
     <script src="scroll-reveal.js" defer></script>
 </head>
 <body class="watchlist-page">
-    <div class="bg-glow bg-glow-1"></div><div class="bg-glow bg-glow-2"></div><div class="bg-glow bg-glow-3"></div>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+
     <main class="watchlist-shell">
-        <header class="watchlist-page-header card">
-            <div>
-                <p class="hero-eyebrow">Trading desk / saved assets</p>
+        <a class="watchlist-back-link" href="index.html"><span aria-hidden="true">←</span> Trading desk</a>
+        <header class="watchlist-page-header">
+            <div class="watchlist-page-header__copy">
+                <p class="hero-eyebrow">Your market radar</p>
                 <h1>My <span class="accent-text">Watchlist</span></h1>
-                <p>Keep your highest-priority markets in one focused view.</p>
+                <p>A focused view of the markets you care about. Keep an eye on prices and signals in one place.</p>
             </div>
             <div class="watchlist-page-actions">
-                <a class="btn-secondary" href="live-watchlist.html">Browse live markets</a>
                 <a class="btn-secondary" href="index.html">Back to dashboard</a>
+                <a class="btn-primary watchlist-browse-link" href="live-watchlist.html">Explore markets <span aria-hidden="true">↗</span></a>
             </div>
         </header>
 
         <section class="watchlist-page-panel card" aria-labelledby="watchlist-title">
             <div class="watchlist-page-toolbar">
-                <div><h2 id="watchlist-title">Saved markets</h2><p><span id="watchlist-count">0</span> assets tracked</p></div>
-                <label class="search-box watchlist-page-search"><svg class="search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input id="watchlist-search" type="search" placeholder="Search your watchlist" autocomplete="off"></label>
+                <div class="watchlist-page-toolbar__title">
+                    <div class="watchlist-page-title-mark" aria-hidden="true">✦</div>
+                    <div>
+                        <h2 id="watchlist-title">Saved markets</h2>
+                        <p><span id="watchlist-count">0</span> assets in your watchlist</p>
+                    </div>
+                </div>
+                <label class="search-box watchlist-page-search">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    <input id="watchlist-search" type="search" placeholder="Search symbol or company" autocomplete="off">
+                </label>
+            </div>
+            <div class="saved-watchlist-columns" aria-hidden="true">
+                <span>Asset</span><span>Market</span><span>Reference price</span><span>Signal</span><span></span>
             </div>
             <div class="saved-watchlist" id="saved-watchlist" aria-live="polite"></div>
-            <p class="watchlist-empty" id="watchlist-empty" hidden>No saved assets match your search.</p>
+            <div class="watchlist-empty" id="watchlist-empty" hidden>
+                <div class="watchlist-empty__icon" aria-hidden="true">⌕</div>
+                <strong id="watchlist-empty-title">Your watchlist is empty</strong>
+                <p id="watchlist-empty-description">Add markets from the live feed to keep them close at hand.</p>
+                <a class="btn-secondary" href="live-watchlist.html">Browse live markets <span aria-hidden="true">→</span></a>
+            </div>
         </section>
     </main>
-    <footer class="app-footer"><a href="index.html">Trading App</a><a href="ai-signals.html">AI Signals</a><a href="about.html">About</a><span>Quantum Trading AI is a simulated platform for educational purposes.</span></footer>
+
+    <footer class="app-footer">
+        <a href="index.html">Trading App</a>
+        <a href="ai-signals.html">AI Signals</a>
+        <a href="about.html">About</a>
+        <span>Quantum Trading AI is a simulated platform for educational purposes.</span>
+    </footer>
+
+    <script src="market-assets.js"></script>
     <script src="watchlist.js"></script>
 </body>
 </html>
