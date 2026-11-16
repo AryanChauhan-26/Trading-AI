@@ -750,23 +750,17 @@
 .market-class-dot--forex { background: #65a788; }
 .market-class-dot--commodities { background: #aa8bc1; }
 
-.market-sparkline {
-    width: 72px;
-    height: 26px;
-    display: block;
-    overflow: visible;
+.market-row__trend {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #43856a;
+    font-size: 9px;
+    font-weight: 700;
+    white-space: nowrap;
 }
 
-.market-sparkline path {
-    fill: none;
-    stroke: #38a37c;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-width: 1.7;
-    vector-effect: non-scaling-stroke;
-}
-
-.market-sparkline.is-down path { stroke: #df7776; }
+.market-row__trend span:last-child { font-size: 12px; }
 
 .market-row__price,
 .market-row__change {
@@ -1000,7 +994,6 @@
     .market-row { grid-template-columns: minmax(150px, 1.5fr) minmax(80px, .8fr) 70px minmax(95px, .9fr) minmax(83px, .72fr) 12px; column-gap: 9px; }
     .markets-table__head,
     .market-row { padding-right: 20px; padding-left: 20px; }
-    .market-sparkline { width: 62px; }
     .markets-hero { padding-left: 42px; }
     .markets-hero__art { right: 4px; }
 }
