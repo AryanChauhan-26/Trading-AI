@@ -1,3 +1,16 @@
+const tradingViewSymbols = {
+    BTCUSD: "BINANCE:BTCUSDT",
+    ETHUSD: "BINANCE:ETHUSDT",
+    SOLUSD: "BINANCE:SOLUSDT",
+    DOGEUSD: "BINANCE:DOGEUSDT",
+    ADAUSD: "BINANCE:ADAUSDT",
+    XRPUSD: "BINANCE:XRPUSDT",
+    AVAXUSD: "BINANCE:AVAXUSDT",
+    GOLD: "TVC:GOLD",
+    XAGUSD: "TVC:SILVER",
+    OIL: "TVC:USOIL"
+};
+
 const marketUniverse = [
     ["TSLA", "Tesla Inc.", "stocks", "NASDAQ", "US", 262.50, 2, "USD", "BUY"],
     ["AAPL", "Apple Inc.", "stocks", "NASDAQ", "US", 215.30, 2, "USD", "NEUTRAL"],
@@ -49,5 +62,6 @@ const marketUniverse = [
     price: basePrice,
     decimals,
     currency,
-    signal
+    signal,
+    tvSymbol: tradingViewSymbols[symbol] || `${exchange}:${symbol}`
 }));
