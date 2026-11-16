@@ -923,119 +923,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- TRADINGVIEW WIDGET CONSTRUCTORS ---
 
-    // 2. Advanced Main Chart Widget
-    let mainChartWidget = null;
     function loadMainChart(symbol, interval) {
         const chartContainer = document.getElementById("chart-container");
         if (!chartContainer) return;
-        chartContainer.innerHTML = "";
-
-        const placeholder = document.createElement("div");
-        placeholder.className = "chart-loading-state";
-        placeholder.innerHTML = `
-            <div class="chart-loading-card">
-                <div class="chart-loading-animation">
-                    <div class="loading-bar"></div>
-                    <div class="loading-bar"></div>
-                    <div class="loading-bar"></div>
-                </div>
-                <div class="chart-loading-title">Loading live chart...</div>
-                <div class="chart-loading-subtitle">Connecting to the TradingView feed.</div>
-            </div>
-        `;
-        chartContainer.appendChild(placeholder);
-
-        const showFallbackChart = (message = "The live feed is temporarily unavailable.") => {
-            if (placeholder.parentNode) { placeholder.remove(); }
-            const fallback = document.createElement("div");
-
-            // If chart fails for an Indian stock, show AI analysis instead.
-            if (activeAsset.country === "India") {
-                fallback.className = "chart-fallback ai-analysis-fallback";
-                const signalClass = activeAsset.signal.toLowerCase().replace(' ', '-');
-                fallback.innerHTML = `
-                    <div class="ai-fallback-card">
-                        <div class="card-header">
-                            <div class="logo-group">
-                                <div class="ai-pulse-ring"></div>
-                                <h2>AI Analysis: ${activeAsset.id}</h2>
-                            </div>
-                            <span class="model-badge">Chart Unavailable</span>
-                        </div>
-                        <div class="advisory-signal-box">
-                            <div class="signal-indicator ${signalClass}">
-                                <div class="signal-text">${activeAsset.signal}</div>
-                                <div class="signal-percentage">Consensus: <span>${activeAsset.strength}%</span></div>
-                            </div>
-                        </div>
-                        <div class="advisory-rationale">
-                            <h4>AI Rationale</h4>
-                            <p>${activeAsset.rationale}</p>
-                        </div>
-                        <div class="fallback-notice">
-                            <p>The live chart for this asset is currently unavailable. The AI's analysis is provided as an alternative view.</p>
-                        </div>
-                    </div>
-                `;
-            } else {
-                // Original generic fallback
-                fallback.className = "chart-fallback";
-                fallback.innerHTML = `
-                    <div class="chart-fallback__card">
-                        <div class="chart-fallback__title">${symbol} live chart</div>
-                        <div class="chart-fallback__subtitle">${message} A lightweight fallback view is shown so the panel stays visible.</div>
-                        <svg viewBox="0 0 560 200" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="24" y="20" width="512" height="160" rx="14" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)"/><path d="M60 145C110 120 135 90 180 98C225 106 244 150 290 132C336 114 360 74 410 84C460 94 485 132 500 60" stroke="#6366F1" stroke-width="4" stroke-linecap="round"/><path d="M60 145C110 120 135 90 180 98C225 106 244 150 290 132C336 114 360 74 410 84C460 94 485 132 500 60" stroke="url(#lineGlow)" stroke-width="2" stroke-linecap="round"/><defs><linearGradient id="lineGlow" x1="60" y1="60" x2="500" y2="145" gradientUnits="userSpaceOnUse"><stop stop-color="#06B6D4"/><stop offset="1" stop-color="#10B981"/></linearGradient></defs></svg>
-                    </div>
-                `;
-            }
-            chartContainer.appendChild(fallback);
-        };
-
-        if (window.TradingView && typeof window.TradingView.widget === "function") {
-            try {
-                if (placeholder.parentNode) {
-                    placeholder.remove();
-                }
-                new window.TradingView.widget({
-                    "width": "100%",
-                    "height": "100%",
-                    "symbol": symbol,
-                    "interval": interval,
-                    "timezone": "Etc/UTC",
-                    "theme": "dark",
-                    "style": "1",
-                    "locale": "en",
-                    "toolbar_bg": "#0B0F19",
-                    "enable_publishing": false,
-                    "hide_side_toolbar": false,
-                    "allow_symbol_change": false,
-                    "container_id": "chart-container",
-                    "studies": [
-                        "RSI@tv-basicstudies",
-                        "MASimple@tv-basicstudies"
-                    ],
-                    "colors": {
-                        "upColor": "#10b981",
-                        "downColor": "#ef4444",
-                        "borderUpColor": "#10b981",
-                        "borderDownColor": "#ef4444",
-                        "wickUpColor": "#10b981",
-                        "wickDownColor": "#ef4444"
-                    }
-                });
-
-                setTimeout(() => {
-                    const hasWidgetCanvas = chartContainer.querySelector("iframe, .tv-widget-container, .tv-embed-widget-wrapper");
-                    if (!hasWidgetCanvas) {
-                        showFallbackChart("The TradingView widget did not render in time.");
-                    }
-                }, 1800);
-            } catch (error) {
-                showFallbackChart("The TradingView widget could not be initialized.");
-            }
-        } else {
-            showFallbackChart("The live feed script is unavailable in this environment.");
-        }
+        window.mountTradingViewChart(chartContainer, symbol, interval, {
+            theme: "dark",
+            studies: ["RSI@tv-basicstudies", "MASimple@tv-basicstudies"]
+        });
     }
 
     // Load all gauges for the active symbol
