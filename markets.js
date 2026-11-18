@@ -16,23 +16,12 @@ const categoryLabels = {
 };
 let category = "all";
 
-function sparkline(asset, index) {
-  const direction = asset.change >= 0 ? 1 : -1;
-  const points = Array.from({ length: 13 }, (_, point) => {
-    const noise = Math.sin((point + 1) * (index + 2) * 0.71) * 3.2;
-    const trend = direction * (point / 12) * 8;
-    return `${point * 8},${16 - noise - trend}`;
-  });
-  const path = points.map((point, pointIndex) => `${pointIndex ? "L" : "M"}${point}`).join(" ");
-  return `<svg class="market-sparkline ${direction > 0 ? "is-up" : "is-down"}" viewBox="0 0 96 32" aria-hidden="true"><path d="${path}"/></svg>`;
-}
-
-function renderMarketRow(asset, index) {
+function renderMarketRow(asset) {
     const up = asset.change >= 0;
-    return `<a class="market-row" href="share-details.html?symbol=${encodeURIComponent(asset.symbol)}" aria-label="${asset.symbol}, ${asset.name}, ${asset.price}, ${up ? "up" : "down"} ${Math.abs(asset.change).toFixed(2)} percent">
+    return `<a class="market-row" href="share-details.html?symbol=${encodeURIComponent(asset.symbol)}" aria-label="Open TradingView chart for ${asset.symbol}, ${asset.name}. Illustrative price ${asset.price}, sample change ${up ? "up" : "down"} ${Math.abs(asset.change).toFixed(2)} percent">
       <span class="market-row__instrument"><span class="market-row__avatar market-row__avatar--${asset.category}">${asset.symbol.slice(0, 1)}</span><span><strong>${asset.symbol}</strong><small>${asset.name}</small></span></span>
       <span class="market-row__class"><span class="market-class-dot market-class-dot--${asset.category}"></span>${categoryLabels[asset.category]}</span>
-      <span class="market-row__trend">${sparkline(asset, index)}</span>
+      <span class="market-row__trend"><span>Live chart</span><span aria-hidden="true">↗</span></span>
       <span class="market-row__price">${asset.price}</span>
       <span class="market-row__change ${up ? "is-up" : "is-down"}"><span>${up ? "↗" : "↘"}</span>${up ? "+" : ""}${asset.change.toFixed(2)}%</span>
       <span class="market-row__arrow" aria-hidden="true">↗</span>
