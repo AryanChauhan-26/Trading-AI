@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="tradingview-chart.css">
+    <link rel="stylesheet" href="share-details.css">
     <script src="scroll-reveal.js" defer></script>
 </head>
 <body class="share-analysis-page">
@@ -52,7 +54,7 @@
                 <section class="analysis-card card">
                     <div class="price-card">
                         <div>
-                            <p class="hero-eyebrow">Live price</p>
+                            <p class="hero-eyebrow">Simulated reference</p>
                             <div class="main-price" id="share-price">$0.00</div>
                             <div class="main-price-change text-buy" id="share-change">+0.00%</div>
                         </div>
@@ -103,6 +105,15 @@
                 </aside>
             </div>
 
+            <section class="share-chart-panel card" aria-labelledby="share-chart-title">
+                <div class="share-chart-panel__heading">
+                    <div><p class="hero-eyebrow">Market data</p><h2 id="share-chart-title">TradingView chart</h2></div>
+                    <span class="share-chart-panel__badge"><i></i> TradingView feed</span>
+                </div>
+                <div id="share-chart" class="share-chart tv-chart-host" role="region" aria-label="TradingView live market chart"></div>
+                <p class="share-chart-panel__note">Chart data is provided by TradingView and may be delayed by exchange. Prices and trade setups elsewhere on this page are illustrative.</p>
+            </section>
+
             <section class="analysis-card card" style="margin-top: 22px;">
                 <h2>AI technical analysis</h2>
                 <div class="summary-note" id="analysis-summary">Loading analysis...</div>
@@ -119,6 +130,8 @@
         <span>Quantum Trading AI is a simulated platform for educational purposes.</span>
     </footer>
 
+    <script src="market-assets.js"></script>
+    <script src="tradingview-chart.js"></script>
     <script src="share-details.js"></script>
 </body>
 </html>
