@@ -13,17 +13,6 @@ function formatPrice(asset) {
     return `${currencySymbols[asset.currency] || "$"}${value.toLocaleString("en-US", { minimumFractionDigits: asset.decimals, maximumFractionDigits: asset.decimals })}`;
 }
 
-function getAssetSeed(symbol) {
-    return [...symbol].reduce((total, char) => total + char.charCodeAt(0), 0);
-}
-
-function getTimeBasedDrift(asset) {
-    const now = Date.now();
-    const seed = getAssetSeed(asset.symbol);
-    const volatility = asset.category === "crypto" ? 0.012 : asset.category === "forex" ? 0.0065 : asset.category === "commodities" ? 0.008 : 0.011;
-    return Math.sin(now / 1100 + seed * 0.42) * volatility + Math.cos(now / 2200 + seed * 0.27) * (volatility * 0.55);
-}
-
 function getCurrentDateLabel() {
     return new Intl.DateTimeFormat("en-US", {
         weekday: "short",
@@ -31,12 +20,6 @@ function getCurrentDateLabel() {
         day: "numeric",
         year: "numeric"
     }).format(new Date());
-}
-
-function getLivePrice(asset) {
-    const drift = getTimeBasedDrift(asset);
-    const target = asset.basePrice * (1 + drift);
-    return Number(Math.max(0.0001, target).toFixed(asset.decimals));
 }
 
 function clamp(value, min, max) {
@@ -83,13 +66,14 @@ function buildTradePlan(asset, recommendation) {
 
 function getAssetBySymbol(symbol) {
     const target = (symbol || "AAPL").toUpperCase();
-    return marketAssets.find(asset => asset.symbol === target) || marketAssets[0];
+    const asset = marketUniverse.find(item => item.symbol === target) || marketUniverse[0];
+    return { ...asset, price: asset.basePrice };
 }
 
 function populateDetails() {
     const params = new URLSearchParams(window.location.search);
     const asset = getAssetBySymbol(params.get("symbol"));
-    asset.price = getLivePrice(asset);
+    window.mountTradingViewChart(document.getElementById("share-chart"), asset.tvSymbol, "D", { theme: "dark" });
     const changePercent = getChangePercent(asset);
     const recommendation = getRecommendation(asset);
     const tradePlan = buildTradePlan(asset, recommendation);
@@ -101,8 +85,8 @@ function populateDetails() {
     document.getElementById("share-market").textContent = `${asset.market} market`;
     document.getElementById("share-date").textContent = getCurrentDateLabel();
     document.getElementById("share-price").textContent = formatPrice(asset);
-    document.getElementById("share-change").textContent = `${changePercent >= 0 ? "+" : ""}${changePercent.toFixed(2)}% today`;
-    document.getElementById("share-change").className = `main-price-change ${changePercent >= 0 ? "text-buy" : "text-sell"}`;
+    document.getElementById("share-change").textContent = "Illustrative · not live";
+    document.getElementById("share-change").className = "main-price-change";
     document.getElementById("market-pill").textContent = asset.exchange;
 
     const dayRangeLow = (asset.price * (1 - 0.022)).toLocaleString("en-US", { minimumFractionDigits: asset.decimals, maximumFractionDigits: asset.decimals });
@@ -158,4 +142,3 @@ function populateDetails() {
 }
 
 populateDetails();
-setInterval(populateDetails, 1500);
