@@ -6,12 +6,13 @@
     <title>Paper Simulator | Trading AI</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="simulator.css">
+    <link rel="stylesheet" href="tradingview-chart.css">
     <script src="scroll-reveal.js" defer></script>
 </head>
 <body class="simulator-page">
     <header class="sim-header">
         <a class="brand" href="index.html"><span class="brand-mark">T</span><span>TRADING<span class="brand-accent">AI</span></span></a>
-        <div class="desk-status"><span class="status-dot"></span> PAPER ACCOUNT <span class="status-divider"></span> MARKETS OPEN</div>
+        <div class="desk-status"><span class="status-dot"></span> PAPER ACCOUNT <span class="status-divider"></span> TRADINGVIEW CHARTS</div>
         <div class="sim-header-actions"><div class="account-chip"><span>Available balance</span><strong id="account-balance">$100,000.00</strong></div><button class="icon-action" id="reset-account" title="Reset paper account" aria-label="Reset paper account">↺</button><a class="back-link" href="index.html">Dashboard</a></div>
     </header>
 
@@ -25,15 +26,16 @@
         </div>
         <section class="desk-grid">
             <aside class="quote-rail panel">
-                <div class="panel-heading"><div><span class="section-kicker">MARKET RADAR</span><h2>Watchlist</h2></div><span class="live-label"><i></i> LIVE</span></div>
+                <div class="panel-heading"><div><span class="section-kicker">MARKET RADAR</span><h2>Watchlist</h2></div><span class="live-label"><i></i> PAPER</span></div>
                 <div class="quote-list" id="quote-list"></div>
-                <div class="rail-note"><span class="note-icon">i</span><p>Prices are simulated for practice. No real orders are placed.</p></div>
+                <div class="rail-note"><span class="note-icon">i</span><p>Watchlist quotes and paper orders are simulated. The chart uses TradingView market data.</p></div>
             </aside>
 
             <section class="chart-workspace panel">
-                <div class="workspace-top"><div><span class="section-kicker">SELECTED INSTRUMENT</span><div class="instrument-title"><strong id="selected-symbol">TSLA</strong><span id="selected-name">Tesla, Inc.</span><span class="exchange-tag">NASDAQ</span></div></div><div class="chart-actions"><button class="time-button active">15m</button><button class="time-button">1h</button><button class="time-button">1D</button><button class="chart-icon" title="Fullscreen chart" aria-label="Fullscreen chart">⤢</button></div></div>
-                <div class="price-line"><strong id="selected-price">$262.84</strong><span class="price-up" id="selected-change">+2.84%</span><span class="price-caption">SIMULATED LAST PRICE</span></div>
-                <div class="chart-stage"><div class="chart-y-axis"><span>270</span><span>265</span><span>260</span><span>255</span><span>250</span></div><svg viewBox="0 0 760 300" preserveAspectRatio="none" class="price-chart" aria-label="Simulated price chart"><defs><linearGradient id="areaFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#23d3a0" stop-opacity=".24"/><stop offset="1" stop-color="#23d3a0" stop-opacity="0"/></linearGradient></defs><path class="chart-area" d="M0 220 C45 205 55 230 88 188 S150 200 180 156 S240 172 275 125 S325 154 365 110 S420 142 455 92 S510 118 542 72 S600 100 640 54 S700 78 760 28 L760 300 L0 300 Z"/><path class="chart-grid-line" d="M0 60H760M0 120H760M0 180H760M0 240H760"/><path class="chart-path" d="M0 220 C45 205 55 230 88 188 S150 200 180 156 S240 172 275 125 S325 154 365 110 S420 142 455 92 S510 118 542 72 S600 100 640 54 S700 78 760 28"/><circle class="chart-point" cx="760" cy="28" r="5"/></svg><div class="chart-x-axis"><span>09:00</span><span>10:00</span><span>11:00</span><span>12:00</span><span>13:00</span><span>14:00</span><span>15:00</span></div></div>
+                <div class="workspace-top"><div><span class="section-kicker">TRADINGVIEW LIVE CHART</span><div class="instrument-title"><strong id="selected-symbol">TSLA</strong><span id="selected-name">Tesla, Inc.</span><span class="exchange-tag" id="selected-exchange">NASDAQ</span></div></div><div class="chart-actions"><button class="time-button active" type="button" data-interval="15">15m</button><button class="time-button" type="button" data-interval="60">1h</button><button class="time-button" type="button" data-interval="D">1D</button><button class="chart-icon" id="chart-fullscreen" type="button" title="Fullscreen chart" aria-label="Fullscreen chart">⤢</button></div></div>
+                <div class="price-line"><strong id="selected-price">$262.84</strong><span class="price-up" id="selected-change">+2.84%</span><span class="price-caption">SIMULATED PAPER PRICE</span></div>
+                <div class="chart-stage"><div id="simulator-chart" class="simulator-chart tv-chart-host" role="region" aria-label="TradingView live chart"></div></div>
+                <p class="chart-feed-note">Chart data is provided by TradingView and may be delayed by exchange. Paper orders continue to use simulated prices.</p>
                 <div class="market-reading"><div><span>AI BIAS</span><strong class="bias-buy" id="ai-bias">STRONG BUY</strong></div><div><span>SESSION HIGH</span><strong id="session-high">$268.44</strong></div><div><span>SESSION LOW</span><strong id="session-low">$251.72</strong></div><div><span>VOLUME</span><strong>38.2M</strong></div></div>
             </section>
 
@@ -42,6 +44,7 @@
         <section class="positions-panel panel"><div class="positions-heading"><div><span class="section-kicker">TRADE JOURNAL</span><h2>Open positions <span id="position-count">0</span></h2></div><div class="journal-actions"><button id="clear-history">Clear history</button><button id="export-history">Export CSV</button></div></div><div class="positions-table-wrap"><table><thead><tr><th>Instrument</th><th>Side</th><th>Size</th><th>Entry</th><th>Mark price</th><th>Margin</th><th>Unrealized P&amp;L</th><th></th></tr></thead><tbody id="positions-body"><tr><td colspan="8" class="empty-state"><strong>Your next trade starts here.</strong><span>Choose an instrument and execute a paper order to populate this journal.</span></td></tr></tbody></table></div></section>
     </main>
     <div class="toast" id="toast" role="status"></div>
+    <script src="tradingview-chart.js"></script>
     <script src="simulator.js"></script>
 </body>
 </html>
