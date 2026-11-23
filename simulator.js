@@ -1,36 +1,444 @@
 const instruments = [
-    { id: 'TSLA', name: 'Tesla, Inc.', tvSymbol: 'NASDAQ:TSLA', exchange: 'NASDAQ', price: 262.84, change: 2.84, decimals: 2, bias: 'STRONG BUY' },
-    { id: 'NVDA', name: 'NVIDIA Corp.', tvSymbol: 'NASDAQ:NVDA', exchange: 'NASDAQ', price: 141.26, change: 1.92, decimals: 2, bias: 'BUY' },
-    { id: 'AAPL', name: 'Apple Inc.', tvSymbol: 'NASDAQ:AAPL', exchange: 'NASDAQ', price: 227.16, change: -0.42, decimals: 2, bias: 'NEUTRAL' },
-    { id: 'BTCUSD', name: 'Bitcoin / USD', tvSymbol: 'BINANCE:BTCUSDT', exchange: 'BINANCE', price: 104220.00, change: 3.61, decimals: 2, bias: 'STRONG BUY' },
-    { id: 'RELIANCE', name: 'Reliance Industries', tvSymbol: 'NSE:RELIANCE', exchange: 'NSE', price: 1284.40, change: -1.16, decimals: 2, bias: 'SELL' },
-    { id: 'XAUUSD', name: 'Gold / USD', tvSymbol: 'TVC:GOLD', exchange: 'TVC', price: 2742.80, change: 0.77, decimals: 2, bias: 'BUY' }
+    { id: 'TSLA', name: 'Tesla, Inc.', tvSymbol: 'NASDAQ:TSLA', exchange: 'NASDAQ', price: 262.84, change: 2.84, bias: 'STRONG BUY' },
+    { id: 'NVDA', name: 'NVIDIA Corp.', tvSymbol: 'NASDAQ:NVDA', exchange: 'NASDAQ', price: 141.26, change: 1.92, bias: 'BUY' },
+    { id: 'AAPL', name: 'Apple Inc.', tvSymbol: 'NASDAQ:AAPL', exchange: 'NASDAQ', price: 227.16, change: -0.42, bias: 'NEUTRAL' },
+    { id: 'BTCUSD', name: 'Bitcoin / USD', tvSymbol: 'BITSTAMP:BTCUSD', exchange: 'BITSTAMP', price: 104220, change: 3.61, bias: 'STRONG BUY' },
+    { id: 'RELIANCE', name: 'Reliance Industries', tvSymbol: 'NSE:RELIANCE', exchange: 'NSE', price: 1284.40, change: -1.16, bias: 'SELL' },
+    { id: 'XAUUSD', name: 'Gold / USD', tvSymbol: 'TVC:GOLD', exchange: 'TVC', price: 2742.80, change: 0.77, bias: 'BUY' }
 ];
-let selected = instruments[0];
+
+const $ = id => document.getElementById(id);
+const money = value => '$' + Number(value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const prices = Object.fromEntries(instruments.map(item => [item.id, item.price]));
+const sessionHighs = { ...prices };
+const sessionLows = { ...prices };
+let selected = instruments.find(item => item.id === 'BTCUSD');
 let side = 'BUY';
 let activeInterval = '15';
 let chartSelection = '';
-let prices = Object.fromEntries(instruments.map(item => [item.id, item.price]));
-const $ = id => document.getElementById(id);
-const money = value => '$' + Number(value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const readJson = (key, fallback) => { try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch { return fallback; } };
-let positions = readJson('apex_positions', []);
-if (!Array.isArray(positions)) positions = [];
-let balance = Number(localStorage.getItem('apex_balance_usd')) || 100000;
-function saveState() { localStorage.setItem('apex_positions', JSON.stringify(positions)); localStorage.setItem('apex_balance_usd', balance.toFixed(2)); }
-function showToast(message, error = false) { const toast = $('toast'); toast.textContent = message; toast.className = `toast show${error ? ' error' : ''}`; setTimeout(() => toast.classList.remove('show'), 2600); }
-function renderQuotes(filter = '') { $('quote-list').innerHTML = instruments.filter(item => `${item.id} ${item.name}`.toLowerCase().includes(filter.toLowerCase())).map(item => `<div class="quote-row ${item.id === selected.id ? 'selected' : ''}" data-id="${item.id}"><div><strong>${item.id}</strong><small>${item.name}</small></div><div><span class="quote-price">${money(prices[item.id])}</span><span class="quote-change ${item.change >= 0 ? 'positive' : 'negative'}">${item.change >= 0 ? '+' : ''}${item.change.toFixed(2)}%</span></div></div>`).join(''); document.querySelectorAll('.quote-row').forEach(row => row.addEventListener('click', () => selectInstrument(row.dataset.id))); }
-function loadSelectedChart() { const key = `${selected.tvSymbol}:${activeInterval}`; if (chartSelection === key) return; chartSelection = key; window.mountTradingViewChart($('simulator-chart'), selected.tvSymbol, activeInterval, { theme: 'dark' }); }
-function selectInstrument(id) { selected = instruments.find(item => item.id === id) || selected; $('selected-symbol').textContent = selected.id; $('selected-name').textContent = selected.name; $('selected-exchange').textContent = selected.exchange; $('selected-price').textContent = money(prices[selected.id]); $('selected-change').textContent = `${selected.change >= 0 ? '+' : ''}${selected.change.toFixed(2)}%`; $('ticket-symbol').textContent = selected.id; $('ticket-price').textContent = money(prices[selected.id]); $('ai-bias').textContent = selected.bias; $('ai-bias').className = selected.bias.includes('SELL') ? 'negative' : selected.bias === 'NEUTRAL' ? '' : 'bias-buy'; renderQuotes($('quote-search').value); updateTicket(); loadSelectedChart(); }
-function updateTicket() { const margin = Math.max(0, Number($('margin').value) || 0); const leverage = Number($('leverage').value) || 1; const price = prices[selected.id]; const value = margin * leverage; const quantity = price ? value / price : 0; $('leverage-value').textContent = `${leverage}x`; $('position-value').textContent = money(value); $('quantity').textContent = quantity.toFixed(4); const tp = Number($('take-profit').value) || 0; const sl = Number($('stop-loss').value) || 0; const profit = tp > 0 ? Math.max(0, side === 'BUY' ? tp - price : price - tp) * quantity : margin * 3.5; const loss = sl > 0 ? Math.max(0, side === 'BUY' ? price - sl : sl - price) * quantity : margin; $('potential-profit').textContent = `+${money(profit)}`; $('potential-loss').textContent = `-${money(loss)}`; }
-function setSide(nextSide) { side = nextSide; const buy = side === 'BUY'; $('buy-tab').classList.toggle('active', buy); $('sell-tab').classList.toggle('active', !buy); $('execute-order').className = `execute-button ${buy ? 'buy' : 'sell'}`; $('execute-order').innerHTML = `EXECUTE ${buy ? 'BUY' : 'SELL'} ORDER <span>↗</span>`; updateTicket(); }
-function renderPositions() { $('position-count').textContent = positions.length; if (!positions.length) { $('positions-body').innerHTML = '<tr><td colspan="8" class="empty-state"><strong>Your next trade starts here.</strong><span>Choose an instrument and execute a paper order to populate this journal.</span></td></tr>'; return; } $('positions-body').innerHTML = positions.map(position => { const current = prices[position.assetId] || position.currentPriceUSD || position.entryPriceUSD; const pnl = (position.type === 'BUY' ? current - position.entryPriceUSD : position.entryPriceUSD - current) * position.qty; position.currentPriceUSD = current; position.pnlUSD = pnl; return `<tr><td><strong>${position.assetId}</strong></td><td class="${position.type === 'BUY' ? 'side-buy' : 'side-sell'}">${position.type === 'BUY' ? 'LONG' : 'SHORT'}</td><td>${position.qty.toFixed(4)}</td><td>${money(position.entryPriceUSD)}</td><td>${money(current)}</td><td>${money(position.marginUSD)}</td><td class="${pnl >= 0 ? 'positive' : 'negative'}">${pnl >= 0 ? '+' : '-'}${money(Math.abs(pnl))}</td><td><button class="close-position" data-id="${position.id}">CLOSE</button></td></tr>`; }).join(''); localStorage.setItem('apex_positions', JSON.stringify(positions)); document.querySelectorAll('.close-position').forEach(button => button.addEventListener('click', () => closePosition(button.dataset.id))); }
-function executeOrder() { const margin = Number($('margin').value) || 0; const leverage = Number($('leverage').value) || 1; const price = prices[selected.id]; const tp = Number($('take-profit').value) || 0; const sl = Number($('stop-loss').value) || 0; if (margin < 10) return showToast('Minimum margin is $10.', true); if (margin > balance) return showToast('Insufficient simulated balance.', true); if ((side === 'BUY' && ((tp && tp <= price) || (sl && sl >= price))) || (side === 'SELL' && ((tp && tp >= price) || (sl && sl <= price)))) return showToast('Check your take profit and stop loss levels.', true); const position = { id: `trade_${Date.now()}`, assetId: selected.id, symbol: selected.id, name: selected.name, type: side, leverage, marginUSD: margin, qty: margin * leverage / price, entryPriceUSD: price, currentPriceUSD: price, tpPriceUSD: tp, slPriceUSD: sl, pnlUSD: 0, pnlPercent: 0, status: 'OPEN', time: new Date().toLocaleTimeString() }; balance -= margin; positions.push(position); saveState(); renderPositions(); $('account-balance').textContent = money(balance); showToast(`${side === 'BUY' ? 'Long' : 'Short'} ${selected.id} position opened.`); }
-function closePosition(id, reason = '') { const position = positions.find(item => item.id === id); if (!position) return; const current = prices[position.assetId] || position.currentPriceUSD || position.entryPriceUSD; const pnl = (position.type === 'BUY' ? current - position.entryPriceUSD : position.entryPriceUSD - current) * position.qty; balance += position.marginUSD + pnl; positions = positions.filter(item => item.id !== id); const history = readJson('apex_history', []); history.unshift({ ...position, exitPriceUSD: current, pnlUSD: pnl, pnlPercent: position.marginUSD ? pnl / position.marginUSD * 100 : 0, status: pnl >= 0 ? 'PROFIT' : 'LOSS', closedAt: new Date().toISOString(), closeReason: reason || 'Manual close' }); localStorage.setItem('apex_history', JSON.stringify(history)); saveState(); $('account-balance').textContent = money(balance); renderPositions(); showToast(`${position.assetId} ${reason ? `${reason.toLowerCase()} at` : 'closed at'} ${pnl >= 0 ? '+' : '-'}${money(Math.abs(pnl))}.`); }
-function tick() { instruments.forEach(item => { prices[item.id] *= 1 + (Math.random() - 0.48) * 0.0008; }); const triggered = positions.find(position => { const price = prices[position.assetId]; if (!price) return false; return position.type === 'BUY' ? (position.tpPriceUSD > 0 && price >= position.tpPriceUSD) || (position.slPriceUSD > 0 && price <= position.slPriceUSD) : (position.tpPriceUSD > 0 && price <= position.tpPriceUSD) || (position.slPriceUSD > 0 && price >= position.slPriceUSD); }); if (triggered) closePosition(triggered.id, 'Target/stop triggered'); selectInstrument(selected.id); renderPositions(); }
-function exportHistory() { const history = readJson('apex_history', []); if (!Array.isArray(history) || !history.length) return showToast('No closed trades to export.', true); const headers = ['Instrument', 'Side', 'Entry price', 'Exit price', 'Margin', 'PnL', 'PnL %', 'Closed at']; const rows = history.map(trade => [trade.assetId, trade.type, trade.entryPriceUSD, trade.exitPriceUSD, trade.marginUSD, trade.pnlUSD, trade.pnlPercent, trade.closedAt || trade.time].map(value => `"${String(value ?? '').replace(/"/g, '""')}"`).join(',')); const blob = new Blob([[headers.join(','), ...rows].join('\n')], { type: 'text/csv;charset=utf-8' }); const link = document.createElement('a'); const url = URL.createObjectURL(blob); link.href = url; link.download = 'trading-ai-history.csv'; document.body.appendChild(link); link.click(); link.remove(); URL.revokeObjectURL(url); }
-$('quote-search').addEventListener('input', event => renderQuotes(event.target.value)); $('leverage').addEventListener('input', updateTicket); $('margin').addEventListener('input', updateTicket); $('take-profit').addEventListener('input', updateTicket); $('stop-loss').addEventListener('input', updateTicket); $('buy-tab').addEventListener('click', () => setSide('BUY')); $('sell-tab').addEventListener('click', () => setSide('SELL')); $('execute-order').addEventListener('click', executeOrder); $('reset-account').addEventListener('click', () => { balance = 100000; positions = []; saveState(); $('account-balance').textContent = money(balance); renderPositions(); showToast('Paper account reset.'); }); $('clear-history').addEventListener('click', () => { localStorage.removeItem('apex_history'); showToast('Trade history cleared.'); }); $('export-history').addEventListener('click', exportHistory);
-document.querySelectorAll('.time-button').forEach(button => button.addEventListener('click', () => { activeInterval = button.dataset.interval; document.querySelectorAll('.time-button').forEach(item => item.classList.toggle('active', item === button)); chartSelection = ''; loadSelectedChart(); }));
-$('chart-fullscreen').addEventListener('click', () => { const chart = document.querySelector('.chart-workspace'); if (!document.fullscreenElement) chart.requestFullscreen?.(); else document.exitFullscreen?.(); });
-function updateClock() { $('session-clock').textContent = new Date().toLocaleTimeString('en-GB'); }
-$('account-balance').textContent = money(balance); renderQuotes(); selectInstrument(selected.id); renderPositions(); updateClock(); setInterval(updateClock, 1000); setInterval(tick, 1800);
+let toastTimeout;
+
+function readJson(key, fallback) {
+    try {
+        const value = localStorage.getItem(key);
+        return value === null ? fallback : JSON.parse(value);
+    } catch (error) {
+        console.error(`Unable to read ${key} from local storage.`, error);
+        return fallback;
+    }
+}
+
+function readPositions() {
+    const stored = readJson('apex_positions', []);
+    if (!Array.isArray(stored)) return [];
+
+    return stored.filter(position =>
+        position &&
+        typeof position.id === 'string' &&
+        typeof position.assetId === 'string' &&
+        ['BUY', 'SELL'].includes(position.type) &&
+        Number.isFinite(Number(position.qty)) &&
+        Number(position.qty) > 0 &&
+        Number.isFinite(Number(position.entryPriceUSD)) &&
+        Number(position.entryPriceUSD) > 0 &&
+        Number.isFinite(Number(position.marginUSD)) &&
+        Number(position.marginUSD) >= 0
+    ).map(position => ({
+        ...position,
+        qty: Number(position.qty),
+        entryPriceUSD: Number(position.entryPriceUSD),
+        marginUSD: Number(position.marginUSD),
+        leverage: Number(position.leverage) || 1,
+        currentPriceUSD: Number(position.currentPriceUSD) > 0 ? Number(position.currentPriceUSD) : Number(position.entryPriceUSD),
+        tpPriceUSD: Number(position.tpPriceUSD) || 0,
+        slPriceUSD: Number(position.slPriceUSD) || 0
+    }));
+}
+
+let positions = readPositions();
+let storedBalance;
+try {
+    const stored = localStorage.getItem('apex_balance_usd');
+    storedBalance = stored === null ? NaN : Number(stored);
+} catch (error) {
+    console.error('Unable to read the paper account balance.', error);
+    storedBalance = NaN;
+}
+let balance = Number.isFinite(storedBalance) && storedBalance >= 0 ? storedBalance : 100000;
+
+function saveState() {
+    try {
+        localStorage.setItem('apex_positions', JSON.stringify(positions));
+        localStorage.setItem('apex_balance_usd', balance.toFixed(2));
+    } catch (error) {
+        console.error('Unable to save the paper trading account.', error);
+        showToast('Could not save your account. Check browser storage.', true);
+    }
+}
+
+function showToast(message, error = false) {
+    const toast = $('toast');
+    clearTimeout(toastTimeout);
+    toast.textContent = message;
+    toast.className = `toast show${error ? ' error' : ''}`;
+    toastTimeout = setTimeout(() => toast.classList.remove('show'), 2600);
+}
+
+function renderQuotes(filter = '') {
+    const query = filter.trim().toLowerCase();
+    const list = $('quote-list');
+    list.replaceChildren();
+
+    instruments.filter(item => `${item.id} ${item.name}`.toLowerCase().includes(query)).forEach(item => {
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.className = `quote-row${item.id === selected.id ? ' selected' : ''}`;
+        row.setAttribute('aria-pressed', String(item.id === selected.id));
+        row.addEventListener('click', () => selectInstrument(item.id));
+
+        const details = document.createElement('span');
+        const symbol = document.createElement('strong');
+        symbol.textContent = item.id;
+        const name = document.createElement('small');
+        name.textContent = item.name;
+        details.append(symbol, name);
+
+        const quote = document.createElement('span');
+        const price = document.createElement('span');
+        price.className = 'quote-price';
+        price.textContent = money(prices[item.id]);
+        const change = document.createElement('span');
+        change.className = `quote-change ${item.change >= 0 ? 'positive' : 'negative'}`;
+        change.textContent = `${item.change >= 0 ? '+' : ''}${item.change.toFixed(2)}%`;
+        quote.append(price, change);
+        row.append(details, quote);
+        list.appendChild(row);
+    });
+}
+
+function updateSelectedDisplay() {
+    $('selected-price').textContent = money(prices[selected.id]);
+    $('ticket-price').textContent = money(prices[selected.id]);
+    $('session-high').textContent = money(sessionHighs[selected.id]);
+    $('session-low').textContent = money(sessionLows[selected.id]);
+    $('selected-change').textContent = `${selected.change >= 0 ? '+' : ''}${selected.change.toFixed(2)}%`;
+    renderQuotes($('quote-search').value);
+}
+
+function loadSelectedChart() {
+    const key = `${selected.tvSymbol}:${activeInterval}`;
+    if (chartSelection === key) return;
+    chartSelection = key;
+    if (typeof window.mountTradingViewChart === 'function') {
+        window.mountTradingViewChart($('simulator-chart'), selected.tvSymbol, activeInterval, { theme: 'dark' });
+    } else {
+        $('simulator-chart').textContent = 'Chart unavailable. Paper trading is still ready.';
+    }
+}
+
+function selectInstrument(id) {
+    const instrument = instruments.find(item => item.id === id);
+    if (!instrument) return;
+    selected = instrument;
+    $('selected-symbol').textContent = selected.id;
+    $('selected-name').textContent = selected.name;
+    $('selected-exchange').textContent = selected.exchange;
+    $('ticket-symbol').textContent = selected.id;
+    $('ai-bias').textContent = selected.bias;
+    $('ai-bias').className = selected.bias.includes('SELL') ? 'negative' : selected.bias === 'NEUTRAL' ? '' : 'bias-buy';
+    updateSelectedDisplay();
+    updateTicket();
+    loadSelectedChart();
+}
+
+function optionalPrice(id) {
+    const raw = $(id).value.trim();
+    if (!raw) return null;
+    const value = Number(raw);
+    return Number.isFinite(value) && value > 0 ? value : NaN;
+}
+
+function updateTicket() {
+    const margin = Number($('margin').value);
+    const safeMargin = Number.isFinite(margin) && margin > 0 ? margin : 0;
+    const leverage = Number($('leverage').value);
+    const price = prices[selected.id];
+    const quantity = safeMargin * leverage / price;
+    $('leverage-value').textContent = `${leverage}x`;
+    $('position-value').textContent = money(safeMargin * leverage);
+    $('quantity').textContent = quantity.toFixed(4);
+    $('margin').max = String(Math.max(10, balance));
+
+    const takeProfit = optionalPrice('take-profit');
+    const stopLoss = optionalPrice('stop-loss');
+    const profitDistance = takeProfit === null || !Number.isFinite(takeProfit)
+        ? null
+        : side === 'BUY' ? takeProfit - price : price - takeProfit;
+    const lossDistance = stopLoss === null || !Number.isFinite(stopLoss)
+        ? null
+        : side === 'BUY' ? price - stopLoss : stopLoss - price;
+    const profit = profitDistance !== null && profitDistance > 0 ? profitDistance * quantity : null;
+    const loss = lossDistance !== null && lossDistance > 0 ? Math.min(safeMargin, lossDistance * quantity) : null;
+    $('potential-profit').textContent = profit === null ? '—' : `+${money(profit)}`;
+    $('potential-loss').textContent = loss === null ? '—' : `-${money(loss)}`;
+}
+
+function setSide(nextSide) {
+    side = nextSide;
+    const buy = side === 'BUY';
+    $('buy-tab').classList.toggle('active', buy);
+    $('sell-tab').classList.toggle('active', !buy);
+    $('execute-order').className = `execute-button ${buy ? 'buy' : 'sell'}`;
+    $('execute-order').innerHTML = `EXECUTE ${buy ? 'BUY' : 'SELL'} ORDER <span>↗</span>`;
+    updateTicket();
+}
+
+function positionPnl(position, price) {
+    const direction = position.type === 'BUY' ? 1 : -1;
+    return (price - position.entryPriceUSD) * position.qty * direction;
+}
+
+function renderPositions() {
+    $('position-count').textContent = positions.length;
+    const body = $('positions-body');
+    body.replaceChildren();
+
+    if (!positions.length) {
+        const row = document.createElement('tr');
+        const cell = document.createElement('td');
+        cell.colSpan = 8;
+        cell.className = 'empty-state';
+        const title = document.createElement('strong');
+        title.textContent = 'Your next trade starts here.';
+        const description = document.createElement('span');
+        description.textContent = 'Choose an instrument and execute a paper order to populate this journal.';
+        cell.append(title, description);
+        row.appendChild(cell);
+        body.appendChild(row);
+        return;
+    }
+
+    positions.forEach(position => {
+        const current = prices[position.assetId] || position.currentPriceUSD;
+        const pnl = positionPnl(position, current);
+        position.currentPriceUSD = current;
+        position.pnlUSD = pnl;
+        const row = document.createElement('tr');
+        const values = [
+            position.assetId,
+            position.type === 'BUY' ? 'LONG' : 'SHORT',
+            Number(position.qty).toFixed(4),
+            money(position.entryPriceUSD),
+            money(current),
+            money(position.marginUSD),
+            `${pnl >= 0 ? '+' : '-'}${money(Math.abs(pnl))}`
+        ];
+        values.forEach((value, index) => {
+            const cell = document.createElement('td');
+            cell.textContent = value;
+            if (index === 0) {
+                const strong = document.createElement('strong');
+                strong.textContent = value;
+                cell.replaceChildren(strong);
+            } else if (index === 1) {
+                cell.className = position.type === 'BUY' ? 'side-buy' : 'side-sell';
+            } else if (index === 6) {
+                cell.className = pnl >= 0 ? 'positive' : 'negative';
+            }
+            row.appendChild(cell);
+        });
+        const action = document.createElement('td');
+        const close = document.createElement('button');
+        close.type = 'button';
+        close.className = 'close-position';
+        close.textContent = 'CLOSE';
+        close.addEventListener('click', () => closePosition(position.id));
+        action.appendChild(close);
+        row.appendChild(action);
+        body.appendChild(row);
+    });
+    saveState();
+}
+
+function updateBalanceDisplay() {
+    $('account-balance').textContent = money(balance);
+}
+
+function executeOrder() {
+    const margin = Number($('margin').value);
+    const leverage = Number($('leverage').value);
+    const price = prices[selected.id];
+    const takeProfit = optionalPrice('take-profit');
+    const stopLoss = optionalPrice('stop-loss');
+
+    if (!Number.isFinite(margin) || margin < 10) return showToast('Minimum margin is $10.', true);
+    if (margin > balance) return showToast('Insufficient simulated balance.', true);
+    if (!Number.isFinite(leverage) || leverage < 1 || leverage > 50) return showToast('Choose leverage between 1x and 50x.', true);
+    if (takeProfit !== null && !Number.isFinite(takeProfit) || stopLoss !== null && !Number.isFinite(stopLoss)) {
+        return showToast('Enter valid positive take-profit and stop-loss prices.', true);
+    }
+    if ((side === 'BUY' && ((takeProfit !== null && takeProfit <= price) || (stopLoss !== null && stopLoss >= price))) ||
+        (side === 'SELL' && ((takeProfit !== null && takeProfit >= price) || (stopLoss !== null && stopLoss <= price)))) {
+        return showToast('Check your take profit and stop loss levels.', true);
+    }
+
+    const position = {
+        id: `trade_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+        assetId: selected.id,
+        symbol: selected.id,
+        name: selected.name,
+        type: side,
+        leverage,
+        marginUSD: margin,
+        qty: margin * leverage / price,
+        entryPriceUSD: price,
+        currentPriceUSD: price,
+        tpPriceUSD: takeProfit || 0,
+        slPriceUSD: stopLoss || 0,
+        pnlUSD: 0,
+        pnlPercent: 0,
+        status: 'OPEN',
+        time: new Date().toLocaleTimeString()
+    };
+    balance -= margin;
+    positions.push(position);
+    saveState();
+    renderPositions();
+    updateBalanceDisplay();
+    showToast(`${side === 'BUY' ? 'Long' : 'Short'} ${selected.id} position opened.`);
+}
+
+function closePosition(id, reason = '') {
+    const index = positions.findIndex(position => position.id === id);
+    if (index < 0) return;
+    const position = positions[index];
+    const current = prices[position.assetId] || position.currentPriceUSD || position.entryPriceUSD;
+    const pnl = Math.max(-position.marginUSD, positionPnl(position, current));
+    const history = readJson('apex_history', []);
+    const safeHistory = Array.isArray(history) ? history : [];
+    safeHistory.unshift({
+        ...position,
+        exitPriceUSD: current,
+        pnlUSD: pnl,
+        pnlPercent: position.marginUSD ? pnl / position.marginUSD * 100 : 0,
+        status: pnl >= 0 ? 'PROFIT' : 'LOSS',
+        closedAt: new Date().toISOString(),
+        closeReason: reason || 'Manual close'
+    });
+    try {
+        localStorage.setItem('apex_history', JSON.stringify(safeHistory));
+    } catch (error) {
+        console.error('Unable to save the trade history.', error);
+        showToast('Trade closed, but history could not be saved.', true);
+    }
+    balance += position.marginUSD + pnl;
+    positions.splice(index, 1);
+    saveState();
+    updateBalanceDisplay();
+    renderPositions();
+    showToast(`${position.assetId} ${reason ? `${reason.toLowerCase()} at` : 'closed at'} ${pnl >= 0 ? '+' : '-'}${money(Math.abs(pnl))}.`);
+}
+
+function tick() {
+    instruments.forEach(item => {
+        prices[item.id] *= 1 + (Math.random() - 0.48) * 0.0008;
+        sessionHighs[item.id] = Math.max(sessionHighs[item.id], prices[item.id]);
+        sessionLows[item.id] = Math.min(sessionLows[item.id], prices[item.id]);
+    });
+
+    const triggered = positions.filter(position => {
+        const price = prices[position.assetId];
+        if (!price) return false;
+        const liquidated = positionPnl(position, price) <= -position.marginUSD;
+        const takeProfitHit = position.type === 'BUY'
+            ? position.tpPriceUSD > 0 && price >= position.tpPriceUSD
+            : position.tpPriceUSD > 0 && price <= position.tpPriceUSD;
+        const stopLossHit = position.type === 'BUY'
+            ? position.slPriceUSD > 0 && price <= position.slPriceUSD
+            : position.slPriceUSD > 0 && price >= position.slPriceUSD;
+        return liquidated || takeProfitHit || stopLossHit;
+    });
+    triggered.forEach(position => {
+        const price = prices[position.assetId];
+        const reason = positionPnl(position, price) <= -position.marginUSD
+            ? 'Position liquidated'
+            : 'Target/stop triggered';
+        closePosition(position.id, reason);
+    });
+
+    updateSelectedDisplay();
+    updateTicket();
+    renderPositions();
+}
+
+function exportHistory() {
+    const history = readJson('apex_history', []);
+    if (!Array.isArray(history) || !history.length) return showToast('No closed trades to export.', true);
+    const headers = ['Instrument', 'Side', 'Entry price', 'Exit price', 'Margin', 'PnL', 'PnL %', 'Closed at'];
+    const rows = history.map(trade => [
+        trade.assetId, trade.type, trade.entryPriceUSD, trade.exitPriceUSD, trade.marginUSD,
+        trade.pnlUSD, trade.pnlPercent, trade.closedAt || trade.time
+    ].map(value => `"${String(value ?? '').replace(/"/g, '""')}"`).join(','));
+    const blob = new Blob([[headers.join(','), ...rows].join('\n')], { type: 'text/csv;charset=utf-8' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.href = url;
+    link.download = 'trading-ai-history.csv';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+$('quote-search').addEventListener('input', event => renderQuotes(event.target.value));
+['leverage', 'margin', 'take-profit', 'stop-loss'].forEach(id => $(id).addEventListener('input', updateTicket));
+$('buy-tab').addEventListener('click', () => setSide('BUY'));
+$('sell-tab').addEventListener('click', () => setSide('SELL'));
+$('execute-order').addEventListener('click', executeOrder);
+$('reset-account').addEventListener('click', () => {
+    if (!window.confirm('Reset your paper account and close all open positions? Closed trade history will be kept.')) return;
+    balance = 100000;
+    positions = [];
+    saveState();
+    updateBalanceDisplay();
+    renderPositions();
+    showToast('Paper account reset.');
+});
+$('clear-history').addEventListener('click', () => {
+    try {
+        localStorage.removeItem('apex_history');
+        showToast('Trade history cleared.');
+    } catch (error) {
+        console.error('Unable to clear trade history.', error);
+        showToast('Could not clear trade history.', true);
+    }
+});
+$('export-history').addEventListener('click', exportHistory);
+document.querySelectorAll('.time-button').forEach(button => button.addEventListener('click', () => {
+    activeInterval = button.dataset.interval;
+    document.querySelectorAll('.time-button').forEach(item => item.classList.toggle('active', item === button));
+    chartSelection = '';
+    loadSelectedChart();
+}));
+$('chart-fullscreen').addEventListener('click', async () => {
+    const chart = document.querySelector('.chart-workspace');
+    try {
+        if (!document.fullscreenElement) await chart.requestFullscreen?.();
+        else await document.exitFullscreen?.();
+    } catch (error) {
+        console.error('Unable to change chart fullscreen mode.', error);
+        showToast('Fullscreen is unavailable in this browser.', true);
+    }
+});
+
+function updateClock() {
+    $('session-clock').textContent = new Date().toLocaleTimeString('en-GB', { timeZone: 'Asia/Kolkata' });
+}
+
+updateBalanceDisplay();
+renderQuotes();
+selectInstrument(selected.id);
+renderPositions();
+updateClock();
+setInterval(updateClock, 1000);
+setInterval(tick, 1800);
