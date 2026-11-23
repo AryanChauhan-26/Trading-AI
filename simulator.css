@@ -7,6 +7,8 @@
 @media(max-width:700px){.simulator-page .sim-header{padding:0 17px}.desk-status,.account-chip,.icon-action{display:none}.back-link{border:0;padding:0}.desk-shell{padding:28px 14px 45px}.desk-heading{align-items:start}.desk-heading h1{font-size:28px}.session-clock{display:none}.desk-grid{display:flex;flex-direction:column}.quote-rail,.chart-workspace{min-height:0}.quote-rail{max-height:330px}.chart-workspace{padding:18px 14px}.instrument-title span:not(.exchange-tag){display:none}.chart-actions .time-button:nth-child(2),.chart-actions .time-button:nth-child(3){display:none}.price-line{margin-top:24px}.price-caption{display:none}.chart-stage{height:260px;padding-left:30px}.price-chart{height:220px}.market-reading{gap:12px}.market-reading div{padding-left:8px}.market-reading div:nth-child(3),.market-reading div:nth-child(4){display:none}.market-reading{grid-template-columns:1fr 1fr}.market-reading div:nth-child(2){border:0}.positions-panel{padding:18px 14px}.positions-heading{align-items:start;gap:14px;flex-direction:column}.journal-actions{align-self:stretch}.journal-actions button{flex:1}.order-ticket{padding:20px 15px}}
 
 .chart-stage { height: 330px; padding: 0; }
+.quote-row { width: 100%; color: var(--desk-text); background: transparent; border: 0; text-align: left; font: inherit; }
+.quote-row:focus-visible,.time-button:focus-visible,.chart-icon:focus-visible,.order-tab:focus-visible,.execute-button:focus-visible,.close-position:focus-visible,.journal-actions button:focus-visible,.icon-action:focus-visible { outline: 2px solid var(--desk-green); outline-offset: 3px; }
 .simulator-chart { height: 100%; }
 .chart-feed-note { margin: 4px 0 16px; color: var(--desk-muted); font-size: 10px; line-height: 1.5; }
 .chart-workspace:fullscreen { min-height: 100vh; overflow: auto; padding: 24px; background: var(--desk-bg); }
@@ -17,4 +19,121 @@
     .chart-actions .time-button { display: inline-flex !important; }
     .chart-workspace:fullscreen { padding: 14px; }
     .chart-workspace:fullscreen .chart-stage { height: calc(100vh - 230px); }
+}
+
+.order-ticket {
+    min-width: 0;
+    padding: 24px 20px;
+    border-radius: 16px;
+}
+.ticket-heading { align-items: center; gap: 12px; }
+.ticket-heading h2 { font-size: 19px; line-height: 1.3; }
+.mode-badge { flex: 0 0 auto; border-radius: 999px; white-space: nowrap; }
+.order-tabs {
+    gap: 5px;
+    margin: 22px 0 17px;
+    padding: 4px;
+    border: 1px solid var(--desk-line);
+    border-radius: 12px;
+    background: rgba(0,0,0,.18);
+}
+.order-tab {
+    min-width: 0;
+    padding: 12px 5px;
+    border: 0 !important;
+    border-radius: 9px;
+    font-size: 11px;
+    white-space: nowrap;
+}
+.order-tab.active.buy { background: rgba(35,211,160,.12); }
+.order-tab.active.sell { background: rgba(255,109,114,.12); }
+.ticket-price {
+    min-width: 0;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 14px;
+    border: 1px solid var(--desk-line);
+    border-radius: 12px;
+    background: rgba(0,0,0,.16);
+}
+.ticket-price span { min-width: 0; font-size: 13px; font-weight: 600; }
+.ticket-price strong {
+    min-width: 0;
+    font-size: clamp(16px, 1.3vw, 20px);
+    text-align: right;
+    overflow-wrap: anywhere;
+    font-variant-numeric: tabular-nums;
+}
+.ticket-label { align-items: center; margin: 17px 0 9px; font-size: 10px; }
+.ticket-label output {
+    padding: 4px 8px;
+    border: 1px solid rgba(35,211,160,.28);
+    border-radius: 999px;
+    color: var(--desk-green);
+    font-size: 11px;
+    white-space: nowrap;
+}
+.order-ticket input[type=range] { min-width: 0; min-height: 24px; }
+.range-labels { font-size: 10px; }
+.money-input {
+    min-width: 0;
+    min-height: 50px;
+    border-radius: 10px;
+    background: rgba(0,0,0,.14);
+}
+.money-input input {
+    box-sizing: border-box;
+    min-width: 0;
+    padding: 7px 3px 7px 9px;
+    color: var(--desk-text);
+    font-size: 16px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+.money-input input:focus-visible,.risk-inputs input:focus-visible {
+    outline: 2px solid var(--desk-green);
+    outline-offset: 2px;
+}
+.ticket-stats,.risk-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+.ticket-stats div,.risk-summary div { min-width: 0; }
+.ticket-stats span,.risk-summary span { display: block; font-size: 9px; line-height: 1.5; }
+.ticket-stats strong,.risk-summary strong {
+    font-size: clamp(11px, 1vw, 13px);
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+    font-variant-numeric: tabular-nums;
+}
+.risk-inputs { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+.risk-inputs label { min-width: 0; font-size: 10px; }
+.risk-inputs input {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    min-height: 46px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+}
+.execute-button {
+    display: flex;
+    min-height: 52px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 12px;
+    line-height: 1.4;
+    text-align: left;
+}
+.execute-button span { flex: 0 0 auto; float: none; }
+.ticket-footnote { font-size: 11px; line-height: 1.6; }
+.order-ticket button:focus-visible { outline-offset: 2px; }
+
+@media(min-width:701px) and (max-width:1100px) {
+    .order-ticket .risk-inputs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
