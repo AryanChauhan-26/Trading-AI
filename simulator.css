@@ -137,3 +137,125 @@
 @media(min-width:701px) and (max-width:1100px) {
     .order-ticket .risk-inputs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+.btc-analysis {
+    margin-top: 18px;
+    padding: 18px;
+    border: 1px solid var(--desk-line);
+    border-radius: 14px;
+    background: linear-gradient(145deg, rgba(14,35,43,.9), rgba(7,20,27,.82));
+}
+.btc-analysis [hidden] { display: none !important; }
+.btc-analysis__header,.btc-analysis__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+.btc-analysis__header { margin-bottom: 16px; }
+.btc-analysis__header h2 { margin: 5px 0 0; font-size: 17px; }
+.btc-analysis__actions { justify-content: flex-end; }
+.btc-analysis__status {
+    color: var(--desk-muted);
+    font: 10px 'DM Mono', monospace;
+    text-align: right;
+}
+.btc-analysis__status--error { color: var(--desk-red); }
+.btc-analysis__refresh {
+    flex: 0 0 auto;
+    padding: 7px 10px;
+    border: 1px solid var(--desk-line);
+    border-radius: 8px;
+    color: var(--desk-text);
+    background: rgba(0,0,0,.18);
+    font: 10px 'DM Mono', monospace;
+    cursor: pointer;
+}
+.btc-analysis__signal-row {
+    display: grid;
+    grid-template-columns: minmax(90px,.55fr) minmax(100px,.65fr) minmax(0,2fr);
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    border: 1px solid var(--desk-line);
+    border-radius: 11px;
+    background: rgba(0,0,0,.16);
+}
+.btc-analysis__signal-row div,.btc-analysis__indicators div,.btc-analysis__levels div { min-width: 0; }
+.btc-analysis__signal-row span,.btc-analysis__indicators span,.btc-analysis__levels span {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--desk-muted);
+    font: 9px 'DM Mono', monospace;
+    letter-spacing: .7px;
+    text-transform: uppercase;
+}
+.btc-analysis__signal {
+    font: 700 16px 'DM Mono', monospace;
+}
+.btc-analysis__signal--long { color: var(--desk-green); }
+.btc-analysis__signal--short { color: var(--desk-red); }
+.btc-analysis__signal--wait { color: #e4c875; }
+.btc-analysis__signal-row div:nth-child(2) strong,.btc-analysis__indicators strong,.btc-analysis__levels strong {
+    color: var(--desk-text);
+    font: 500 12px 'DM Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+}
+.btc-analysis__signal-row p {
+    margin: 0;
+    color: #a9bdc0;
+    font-size: 11px;
+    line-height: 1.6;
+}
+.btc-analysis__indicators,.btc-analysis__levels {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+    padding: 14px;
+    border: 1px solid var(--desk-line);
+    border-radius: 11px;
+}
+.btc-analysis__indicators strong,.btc-analysis__levels strong {
+    display: block;
+    font-size: 11px;
+}
+.btc-analysis__paper-note,.btc-analysis__disclaimer,.btc-analysis__other {
+    color: var(--desk-muted);
+    font-size: 10px;
+    line-height: 1.6;
+}
+.btc-analysis__paper-note { margin: 12px 0 8px; }
+.btc-analysis__disclaimer { margin: 12px 0 0; }
+.btc-analysis__other { margin: 0; }
+.btc-analysis__apply {
+    width: 100%;
+    min-height: 44px;
+    border: 1px solid rgba(35,211,160,.35);
+    border-radius: 9px;
+    color: var(--desk-green);
+    background: rgba(35,211,160,.1);
+    font: 600 11px 'DM Mono', monospace;
+    cursor: pointer;
+}
+.btc-analysis__apply:disabled { opacity: .48; cursor: not-allowed; }
+.btc-analysis__refresh:focus-visible,.btc-analysis__apply:focus-visible {
+    outline: 2px solid var(--desk-green);
+    outline-offset: 3px;
+}
+
+@media(max-width:700px) {
+    .btc-analysis { padding: 14px; }
+    .btc-analysis__header { align-items: flex-start; flex-direction: column; }
+    .btc-analysis__actions { width: 100%; justify-content: space-between; }
+    .btc-analysis__signal-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .btc-analysis__signal-row p { grid-column: 1 / -1; }
+    .btc-analysis__indicators,.btc-analysis__levels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media(min-width:701px) and (max-width:1100px) {
+    .btc-analysis__signal-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .btc-analysis__signal-row p { grid-column: 1 / -1; }
+    .btc-analysis__indicators,.btc-analysis__levels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
