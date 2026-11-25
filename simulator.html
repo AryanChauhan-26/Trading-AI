@@ -32,11 +32,46 @@
             </aside>
 
             <section class="chart-workspace panel">
-                <div class="workspace-top"><div><span class="section-kicker">TRADINGVIEW LIVE CHART</span><div class="instrument-title"><strong id="selected-symbol">TSLA</strong><span id="selected-name">Tesla, Inc.</span><span class="exchange-tag" id="selected-exchange">NASDAQ</span></div></div><div class="chart-actions"><button class="time-button active" type="button" data-interval="15">15m</button><button class="time-button" type="button" data-interval="60">1h</button><button class="time-button" type="button" data-interval="D">1D</button><button class="chart-icon" id="chart-fullscreen" type="button" title="Fullscreen chart" aria-label="Fullscreen chart">⤢</button></div></div>
-                <div class="price-line"><strong id="selected-price">$262.84</strong><span class="price-up" id="selected-change">+2.84%</span><span class="price-caption">SIMULATED PAPER PRICE</span></div>
+                <div class="workspace-top"><div><span class="section-kicker">TRADINGVIEW LIVE CHART</span><div class="instrument-title"><strong id="selected-symbol">BTCUSD</strong><span id="selected-name">Bitcoin / USD</span><span class="exchange-tag" id="selected-exchange">BITSTAMP</span></div></div><div class="chart-actions"><button class="time-button active" type="button" data-interval="15">15m</button><button class="time-button" type="button" data-interval="60">1h</button><button class="time-button" type="button" data-interval="D">1D</button><button class="chart-icon" id="chart-fullscreen" type="button" title="Fullscreen chart" aria-label="Fullscreen chart">⤢</button></div></div>
+                <div class="price-line"><strong id="selected-price">$104,220.00</strong><span class="price-up" id="selected-change">+3.61%</span><span class="price-caption">SIMULATED PAPER PRICE</span></div>
                 <div class="chart-stage"><div id="simulator-chart" class="simulator-chart tv-chart-host" role="region" aria-label="TradingView live chart"></div></div>
                 <p class="chart-feed-note">Chart data is provided by TradingView and may be delayed by exchange. Paper orders continue to use simulated prices.</p>
-                <div class="market-reading"><div><span>AI BIAS</span><strong class="bias-buy" id="ai-bias">STRONG BUY</strong></div><div><span>SESSION HIGH</span><strong id="session-high">$268.44</strong></div><div><span>SESSION LOW</span><strong id="session-low">$251.72</strong></div><div><span>VOLUME</span><strong>38.2M</strong></div></div>
+                <div class="market-reading"><div><span>AI BIAS</span><strong class="bias-buy" id="ai-bias">ANALYZING</strong></div><div><span id="session-high-label">SESSION HIGH</span><strong id="session-high">$104,220.00</strong></div><div><span id="session-low-label">SESSION LOW</span><strong id="session-low">$104,220.00</strong></div><div><span id="market-volume-label">VOLUME</span><strong id="market-volume">—</strong></div></div>
+                <section class="btc-analysis" id="btc-analysis" aria-labelledby="btc-analysis-title">
+                    <div class="btc-analysis__header">
+                        <div>
+                            <span class="section-kicker">BTCUSD TECHNICAL ASSISTANT</span>
+                            <h2 id="btc-analysis-title">Market analysis</h2>
+                        </div>
+                        <div class="btc-analysis__actions">
+                            <span class="btc-analysis__status" id="btc-analysis-status" role="status" aria-live="polite">Loading BTCUSD candles…</span>
+                            <button class="btc-analysis__refresh" id="refresh-btc-analysis" type="button" aria-label="Refresh BTCUSD analysis">Refresh</button>
+                        </div>
+                    </div>
+                    <div id="btc-analysis-content" hidden>
+                        <div class="btc-analysis__signal-row">
+                            <div><span>Setup</span><strong id="btc-signal">WAIT</strong></div>
+                            <div><span>Trend</span><strong id="btc-trend">—</strong></div>
+                            <p id="btc-reason">Waiting for market data.</p>
+                        </div>
+                        <div class="btc-analysis__indicators">
+                            <div><span>RSI (14)</span><strong id="btc-rsi">—</strong></div>
+                            <div><span>MACD</span><strong id="btc-macd">—</strong></div>
+                            <div><span>Volume vs avg.</span><strong id="btc-volume-ratio">—</strong></div>
+                            <div><span>ATR (14)</span><strong id="btc-atr">—</strong></div>
+                        </div>
+                        <div class="btc-analysis__levels">
+                            <div><span>Reference entry</span><strong id="btc-entry">—</strong></div>
+                            <div><span>Stop level</span><strong id="btc-stop">—</strong></div>
+                            <div><span>Target level</span><strong id="btc-target">—</strong></div>
+                            <div><span>Reward / risk</span><strong id="btc-reward-risk">—</strong></div>
+                        </div>
+                        <p class="btc-analysis__paper-note">Live BTCUSD reference levels. Applying a setup scales its ATR distances to the simulated paper quote.</p>
+                        <button class="btc-analysis__apply" id="apply-btc-analysis" type="button" disabled>Apply setup to paper ticket</button>
+                    </div>
+                    <p class="btc-analysis__other" id="btc-analysis-other" hidden>BTCUSD analysis only. Select BTCUSD from the watchlist to use this assistant.</p>
+                    <p class="btc-analysis__disclaimer">Rule-based technical analysis of public Coinbase BTC-USD candles. The indicator score is not a probability, trained model, or guarantee of profit. Paper trade only.</p>
+                </section>
             </section>
 
             <aside class="order-ticket panel" id="order-ticket"><div class="ticket-heading"><div><span class="section-kicker">ORDER TICKET</span><h2>Build a position</h2></div><span class="mode-badge">SIMULATED</span></div><div class="order-tabs"><button class="order-tab active buy" id="buy-tab">BUY / LONG</button><button class="order-tab sell" id="sell-tab">SELL / SHORT</button></div><div class="ticket-price"><span id="ticket-symbol">TSLA</span><strong id="ticket-price">$262.84</strong></div><label class="ticket-label" for="leverage">Leverage <output id="leverage-value">10x</output></label><input id="leverage" type="range" min="1" max="50" value="10"><div class="range-labels"><span>1x</span><span>25x</span><span>50x</span></div><label class="ticket-label" for="margin">Margin <span>USD</span></label><div class="money-input"><span>$</span><input id="margin" type="number" min="10" step="50" value="1000"></div><div class="ticket-stats"><div><span>Position value</span><strong id="position-value">$10,000.00</strong></div><div><span>Est. quantity</span><strong id="quantity">38.0450</strong></div></div><div class="risk-inputs"><label>Take profit<input id="take-profit" type="number" placeholder="Optional"></label><label>Stop loss<input id="stop-loss" type="number" placeholder="Optional"></label></div><div class="risk-summary"><div><span>Potential profit</span><strong class="positive" id="potential-profit">+$3,500.00</strong></div><div><span>Risk at stop</span><strong class="negative" id="potential-loss">-$1,000.00</strong></div></div><button class="execute-button buy" id="execute-order">EXECUTE BUY ORDER <span>↗</span></button><p class="ticket-footnote">Orders use your virtual balance and can be closed from the positions panel.</p></aside>
